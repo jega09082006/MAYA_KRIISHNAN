@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="spiceGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF7A00"/>
+      <stop offset="100%" stop-color="#DC2626"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="32" fill="url(#spiceGrad)"/>
+  <path d="M100 40 Q140 70 120 120 Q100 160 100 165 Q100 160 80 120 Q60 70 100 40 Z" fill="#FEF3C7"/>
+  <path d="M100 40 Q110 30 115 25" stroke="#15803D" stroke-width="6" stroke-linecap="round"/>
+</svg>

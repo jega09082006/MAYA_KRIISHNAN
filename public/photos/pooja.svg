@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="poojaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#7E22CE"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="32" fill="url(#poojaGrad)"/>
+  <path d="M50 120 Q100 160 150 120 Q100 140 50 120 Z" fill="#FDE047"/>
+  <path d="M100 65 Q115 95 100 120 Q85 95 100 65 Z" fill="#EF4444"/>
+  <circle cx="100" cy="95" r="8" fill="#F59E0B"/>
+</svg>

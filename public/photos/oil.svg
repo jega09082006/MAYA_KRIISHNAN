@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="oilGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="32" fill="url(#oilGrad)"/>
+  <rect x="75" y="70" width="50" height="85" rx="12" fill="#E0F2FE"/>
+  <rect x="85" y="50" width="30" height="20" rx="4" fill="#0284C7"/>
+  <circle cx="100" cy="115" r="14" fill="#38BDF8"/>
+</svg>

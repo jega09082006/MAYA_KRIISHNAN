@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="herbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="32" fill="url(#herbGrad)"/>
+  <path d="M100 35 C130 65, 140 105, 100 165 C60 105, 70 65, 100 35 Z" fill="#ECFDF5" opacity="0.9"/>
+  <path d="M100 45 L100 155" stroke="#047857" stroke-width="4" stroke-linecap="round"/>
+  <path d="M100 80 Q120 70, 125 90" stroke="#047857" stroke-width="3" fill="none"/>
+  <path d="M100 110 Q80 100, 75 120" stroke="#047857" stroke-width="3" fill="none"/>
+  <circle cx="100" cy="165" r="5" fill="#047857"/>
+</svg>
