@@ -1,67 +1,52 @@
 import React from "react";
 import { Check } from "lucide-react";
+import { getCategoryImage, EG_ICON } from "../utils/images";
 
-/**
- * CategoryChip – fully contained, no layout shift on click/hover.
- *
- * Active  : solid category colour bg, white text, white dot, tick icon.
- * Inactive: white bg, grey border, dark text, coloured dot.
- * Hover   : coloured border + coloured text ONLY — NO transform/scale.
- */
 export default function CategoryChip({ category, active, onClick }) {
-  const { englishName, tamilName, label, color } = category;
+  const { englishName, tamilName, label } = category;
 
-  // Prefer split names; fall back to combined label
   const engLabel = englishName || label;
   const tamLabel = tamilName || null;
+  const catImg = getCategoryImage(category);
 
   return (
     <button
       onClick={onClick}
-      style={
+      className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-full border text-left text-xs sm:text-sm font-medium leading-snug cursor-pointer transition-colors duration-200 box-border ${
         active
-          ? { backgroundColor: color, borderColor: color }
-          : { borderColor: "#e5e7eb" }
-      }
-      onMouseEnter={(e) => {
-        if (!active) {
-          e.currentTarget.style.borderColor = color;
-          e.currentTarget.style.color = color;
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!active) {
-          e.currentTarget.style.borderColor = "#e5e7eb";
-          e.currentTarget.style.color = "";
-        }
-      }}
-      className={[
-        "w-full flex items-start justify-between gap-2",
-        "px-3 py-2 rounded-xl border",
-        "text-left text-sm font-medium leading-snug",
-        "cursor-pointer transition-colors duration-150",
-        "box-border",
-        active ? "text-white shadow-sm" : "bg-white text-gray-700",
-      ].join(" ")}
+          ? "bg-forest border-forest text-cream-100 font-bold shadow-sm"
+          : "bg-cream-100 text-bark-800 border-bark-200 hover:border-forest-400 hover:text-forest-700"
+      }`}
     >
-      {/* Left: dot + label */}
-      <span className="flex items-start gap-2 min-w-0">
-        <span
-          className="mt-0.5 shrink-0 w-2.5 h-2.5 rounded-full"
-          style={{ backgroundColor: active ? "white" : color }}
-        />
+      {/* Left: 28px round thumbnail + label */}
+      <span className="flex items-center gap-2.5 min-w-0">
+        <div className="w-7 h-7 rounded-full border border-gold/40 overflow-hidden bg-[#faf6ee] flex items-center justify-center flex-shrink-0 p-0.5 shadow-xs">
+          <img
+            src={catImg}
+            alt={engLabel}
+            onError={(e) => {
+              e.currentTarget.src = EG_ICON;
+            }}
+            className="w-full h-full object-contain rounded-full"
+          />
+        </div>
         <span className="min-w-0">
-          <span className="block font-semibold break-words">{engLabel}</span>
           {tamLabel && (
             <span
-              className={[
-                "block font-semibold break-words",
-                active ? "text-white" : "text-gray-700",
-              ].join(" ")}
+              className={`block font-extrabold font-tamil leading-tight ${
+                active ? "text-cream-100" : "text-bark-900"
+              }`}
             >
               {tamLabel}
             </span>
           )}
+          <span
+            className={`block text-xs font-normal font-lato leading-tight ${
+              active ? "text-gold-200" : "text-bark-500"
+            }`}
+          >
+            {engLabel}
+          </span>
         </span>
       </span>
 
@@ -69,7 +54,7 @@ export default function CategoryChip({ category, active, onClick }) {
       {active && (
         <Check
           size={14}
-          className="shrink-0 mt-0.5 text-white"
+          className="shrink-0 text-gold ml-1"
           strokeWidth={3}
         />
       )}

@@ -1,0 +1,70 @@
+/* Forest Gold Theme Tokens for MAYA_KRISHNAN */
+:root {
+  /* Forest Scale (Primary #2d5a3d, Deep #1d3d29) */
+  --forest-50: #f2f7f4;
+  --forest-100: #e1ede5;
+  --forest-200: #c3dccb;
+  --forest-300: #9cbfa8;
+  --forest-400: #6d9c7d;
+  --forest-500: #2d5a3d;
+  --forest-600: #244931;
+  --forest-700: #1d3d29;
+  --forest-800: #173021;
+  --forest-900: #112217;
+  --forest-primary: var(--forest-500);
+  --forest-deep: var(--forest-700);
+
+  /* Gold (Turmeric Scale - Primary #d99c2b) */
+  --gold-50: #fcf8eb;
+  --gold-100: #f7edcc;
+  --gold-200: #efda99;
+  --gold-300: #e5c261;
+  --gold-400: #ddaa3a;
+  --gold-500: #d99c2b;
+  --gold-600: #b87b20;
+  --gold-700: #925d1b;
+  --gold-800: #764a1b;
+  --gold-900: #623c19;
+  --gold-primary: var(--gold-500);
+
+  /* Cream Scale (Body #faf6ee aged paper) */
+  --cream-50: #fffdfa;
+  --cream-100: #faf6ee;
+  --cream-200: #f3ebdb;
+  --cream-300: #e9dbc2;
+  --cream-400: #dec7a3;
+  --cream-500: #d1b183;
+  --cream-600: #be996d;
+  --cream-700: #9f7b57;
+  --cream-800: #816349;
+  --cream-900: #6b523e;
+  --cream-body: var(--cream-100);
+
+  /* Bark Scale (Body text #2c231a warm brown) */
+  --bark-50: #f8f6f4;
+  --bark-100: #eeeae4;
+  --bark-200: #dcd4c8;
+  --bark-300: #c5b7a5;
+  --bark-400: #9c8872;
+  --bark-500: #796653;
+  --bark-600: #615041;
+  --bark-700: #4e4034;
+  --bark-800: #3b3027;
+  --bark-900: #2c231a;
+  --bark-body: var(--bark-900);
+
+  /* Functional Colours */
+  --success: var(--forest-500);
+  --danger: #b3402a;
+  --danger-hover: #96331f;
+
+  /* Green Tinted Shadows */
+  --shadow-color: rgba(45, 90, 61, 0.18);
+  --shadow-green: 0 2px 8px rgba(45, 90, 61, 0.12);
+  --shadow-green-hover: 0 8px 24px rgba(45, 90, 61, 0.18);
+
+  /* Fonts */
+  --font-catamaran: 'Catamaran', 'Noto Sans Tamil', sans-serif;
+  --font-lato: 'Lato', sans-serif;
+  --font-playfair: 'Playfair Display', serif;
+}

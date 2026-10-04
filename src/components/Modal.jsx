@@ -8,7 +8,9 @@ export default function Modal({ isOpen, onClose, title, children, size = "md" })
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
@@ -26,19 +28,19 @@ export default function Modal({ isOpen, onClose, title, children, size = "md" })
       onClick={onClose}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" />
+      <div className="absolute inset-0 bg-forest-900/40 backdrop-blur-sm" />
 
       {/* Modal */}
       <div
-        className={`relative bg-white rounded-3xl shadow-2xl w-full ${sizes[size]} max-h-[90vh] overflow-y-auto animate-slide-up`}
+        className={`relative bg-[#faf6ee] rounded-none shadow-green-hover border border-bark-200 w-full ${sizes[size]} max-h-[90vh] overflow-y-auto animate-fade-in text-bark-900`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-gray-800">{title}</h2>
+        <div className="flex items-center justify-between p-5 border-b border-bark-200 bg-[#f3ebdb]">
+          <h2 className="text-lg font-bold font-tamil text-bark-900">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
+            className="p-1.5 rounded-none hover:bg-forest-100 transition-colors text-bark-500 hover:text-bark-900 cursor-pointer"
           >
             <X size={20} />
           </button>

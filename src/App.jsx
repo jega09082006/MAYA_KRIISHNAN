@@ -8,6 +8,8 @@ import ItemListPage from "./pages/user/ItemListPage";
 import ItemDetailPage from "./pages/user/ItemDetailPage";
 import CartPage from "./pages/user/CartPage";
 import LoginPage from "./pages/user/LoginPage";
+import AboutPage from "./pages/user/AboutPage";
+import ContactPage from "./pages/user/ContactPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -33,6 +35,8 @@ export default function App() {
           <Route path="/item/:id" element={<ItemDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
 
           {/* Admin routes (protected) */}
           <Route

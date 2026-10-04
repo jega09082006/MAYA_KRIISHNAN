@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Save, ArrowLeft, Eye, Star, Tag, Leaf, Upload, Image as ImageIcon } from "lucide-react";
+import { Save, ArrowLeft, Eye, Star, Tag, Upload, Image as ImageIcon, RotateCcw } from "lucide-react";
 import { useStore } from "../../context/StoreContext";
 import ItemCard from "../../components/ItemCard";
-
-const PRESET_PHOTOS = [
-  { name: "மூலிகை (Herb)", url: "/photos/herb.svg", emoji: "🌿" },
-  { name: "காரவகை (Spice)", url: "/photos/spice.svg", emoji: "🌶️" },
-  { name: "மளிகை (Grocery)", url: "/photos/grocery.svg", emoji: "🌾" },
-  { name: "பூஜை (Pooja)", url: "/photos/pooja.svg", emoji: "🪔" },
-  { name: "எண்ணெய் (Oil)", url: "/photos/oil.svg", emoji: "🧴" },
-  { name: "மருந்து (Medicine)", url: "/photos/medicine.svg", emoji: "💊" },
-];
+import { GoldLotusOrnament } from "../../components/GoldLotusOrnament";
+import { getItemImage, getCategoryImage, EG_ICON } from "../../utils/images";
 
 const EMPTY_FORM = {
   tamilName: "",
@@ -20,8 +13,7 @@ const EMPTY_FORM = {
   price: "",
   unit: "100g",
   stock: "",
-  imageUrl: "/photos/herb.svg",
-  emoji: "🌿",
+  imageUrl: "",
   categoryIds: [],
   tags: "",
 };
@@ -56,8 +48,7 @@ export default function AdminAddItemPage() {
         price: existingItem.price || "",
         unit: existingItem.unit || "100g",
         stock: existingItem.stock || "",
-        imageUrl: existingItem.imageUrl || existingItem.image || "/photos/herb.svg",
-        emoji: existingItem.emoji || "🌿",
+        imageUrl: existingItem.imageUrl || existingItem.image || "",
         categoryIds: existingItem.categoryIds || existingItem.publicCategories || [],
         tags: existingItem.tags?.join(", ") || "",
       });
@@ -77,7 +68,6 @@ export default function AdminAddItemPage() {
     }
   }
 
-  // Live preview object
   const previewItem = {
     id: id || "preview",
     tamilName: form.tamilName || "தமிழ் பெயர்",
@@ -87,7 +77,7 @@ export default function AdminAddItemPage() {
     unit: form.unit || "100g",
     stock: Number(form.stock) || 0,
     imageUrl: form.imageUrl,
-    emoji: form.emoji || "🌿",
+    image: form.imageUrl,
     categoryIds: form.categoryIds,
     tags: form.tags
       ? form.tags.split(",").map((t) => t.trim()).filter(Boolean)
@@ -126,7 +116,6 @@ export default function AdminAddItemPage() {
       savedItemId = created.id;
     }
 
-    // Update suggestion group memberships
     setItemGroups(savedItemId, selectedGroupIds);
 
     setSaved(true);
@@ -150,22 +139,25 @@ export default function AdminAddItemPage() {
     );
   }
 
+  const formImgSrc = getItemImage(form);
+  const hasCustomImage = Boolean(form.imageUrl && form.imageUrl.trim() !== "");
+
   return (
-    <div className="animate-fade-in space-y-6">
+    <div className="space-y-6 text-gray-800 font-lato">
       {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 border-b border-gray-200 pb-4">
         <button
           onClick={() => navigate("/admin/items")}
-          className="p-2 rounded-xl hover:bg-gray-100 transition-colors text-gray-500 cursor-pointer"
+          className="p-2 rounded-none hover:bg-gray-200 transition-colors text-gray-600 cursor-pointer border border-gray-300"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">
+          <h1 className="text-2xl font-bold font-playfair text-gray-900">
             {isEdit ? "பொருளை மாற்று (Edit Item)" : "புதிய பொருள் சேர் (Add New Item)"}
           </h1>
-          <p className="text-gray-500 text-sm">
-            {isEdit ? "Update item information and photo" : "Add traditional provisions or country medicine item"}
+          <p className="text-gray-500 text-sm font-lato">
+            {isEdit ? "Update item information and photo" : "Add provisions or country medicine item"}
           </p>
         </div>
       </div>
@@ -174,71 +166,79 @@ export default function AdminAddItemPage() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="xl:col-span-2 space-y-6">
           {/* Basic Details */}
-          <div className="card p-6 space-y-5">
-            <h3 className="font-bold text-gray-900 flex items-center gap-2">
-              <Leaf size={16} className="text-emerald-600" /> பொருள் விவரங்கள் (Product Details)
+          <div className="bg-white border border-gray-200 rounded-none p-6 space-y-5 shadow-green">
+            <h3 className="font-bold text-gray-900 flex items-center gap-2 font-tamil text-base border-b border-gray-200 pb-3">
+              <GoldLotusOrnament size={18} /> பொருள் விவரங்கள் (Product Details)
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="label">தமிழ் பெயர் (Tamil Name) *</label>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato">
+                  தமிழ் பெயர் (Tamil Name) *
+                </label>
                 <input
                   type="text"
                   value={form.tamilName}
                   onChange={(e) => setForm({ ...form, tamilName: e.target.value })}
                   placeholder="உ.ம். மஞ்சள் / கருஞ்சீரகம்"
-                  className={`input-field ${errors.tamilName ? "border-red-400 ring-1 ring-red-400" : ""}`}
+                  className={`w-full border border-gray-200 rounded-none px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-forest focus:border-gold bg-gray-50 text-gray-900 font-medium ${errors.tamilName ? "border-red-400 ring-1 ring-red-400" : ""}`}
                 />
                 {errors.tamilName && (
-                  <p className="text-red-500 text-xs mt-1 font-semibold">{errors.tamilName}</p>
+                  <p className="text-danger text-xs mt-1 font-bold font-lato">{errors.tamilName}</p>
                 )}
               </div>
 
               <div>
-                <label className="label">English Name *</label>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato">
+                  English Name *
+                </label>
                 <input
                   type="text"
                   value={form.englishName}
                   onChange={(e) => setForm({ ...form, englishName: e.target.value })}
                   placeholder="e.g. Turmeric / Black Cumin"
-                  className={`input-field ${errors.englishName ? "border-red-400 ring-1 ring-red-400" : ""}`}
+                  className={`w-full border border-gray-200 rounded-none px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-forest focus:border-gold bg-gray-50 text-gray-900 font-medium ${errors.englishName ? "border-red-400 ring-1 ring-red-400" : ""}`}
                 />
                 {errors.englishName && (
-                  <p className="text-red-500 text-xs mt-1 font-semibold">{errors.englishName}</p>
+                  <p className="text-danger text-xs mt-1 font-bold font-lato">{errors.englishName}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <label className="label">விளக்கம் (Short English + Tamil Description)</label>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato">
+                விளக்கம் (Short Description)
+              </label>
               <textarea
                 rows={3}
                 value={form.description}
                 onChange={(e) => setForm({ ...form, description: e.target.value })}
-                placeholder="Pure traditional turmeric. தூய சமையல் மஞ்சள்..."
-                className="input-field resize-none"
+                placeholder="Pure quality turmeric. தூய சமையல் மஞ்சள்..."
+                className="w-full border border-gray-200 rounded-none px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-forest focus:border-gold bg-gray-50 text-gray-900 font-medium resize-none"
               />
             </div>
 
-            {/* Product Photo Upload & Selection */}
+            {/* Product Photo Upload */}
             <div>
-              <label className="label font-bold flex items-center gap-1.5">
-                <ImageIcon size={16} className="text-brand-orange" /> பொருள் புகைப்படம் (Product Photo Upload)
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato flex items-center gap-1.5">
+                <ImageIcon size={16} className="text-forest-700" /> பொருள் புகைப்படம் (Product Photo Upload - Optional)
               </label>
 
               <div className="space-y-4">
-                {/* File Upload Button & Preview */}
-                <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-200">
-                  <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-brand-orange bg-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                    {form.imageUrl ? (
-                      <img src={form.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="text-3xl">{form.emoji || "🌿"}</span>
-                    )}
+                <div className="flex flex-wrap items-center gap-4 p-4 bg-[#faf6ee] rounded-none border border-gray-200">
+                  <div className="w-20 h-20 rounded-none overflow-hidden border border-gray-300 bg-white flex items-center justify-center flex-shrink-0 shadow-sm p-1">
+                    <img
+                      src={formImgSrc}
+                      alt="Preview"
+                      onError={(e) => {
+                        e.currentTarget.src = EG_ICON;
+                      }}
+                      className={`w-full h-full ${hasCustomImage ? "object-cover" : "object-contain"}`}
+                    />
                   </div>
 
                   <div className="flex-1 min-w-[200px] space-y-2">
-                    <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-brand-orange to-brand-pink text-white font-bold text-xs rounded-xl shadow-xs hover:shadow-md transition-all cursor-pointer">
+                    <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-gold text-bark-900 font-extrabold text-xs rounded-none shadow-green hover:bg-gold-600 transition-all cursor-pointer font-lato">
                       <Upload size={14} /> கணினியிலிருந்து புகைப்படம் பதிவேற்றுக (Upload Photo File)
                       <input
                         type="file"
@@ -247,131 +247,136 @@ export default function AdminAddItemPage() {
                         className="hidden"
                       />
                     </label>
-                    <p className="text-[11px] text-gray-500 font-medium">Supported formats: PNG, JPG, WEBP, SVG</p>
+                    <p className="text-[11px] text-gray-500 font-lato">Supported formats: PNG, JPG, WEBP, SVG</p>
                   </div>
                 </div>
 
-                {/* Preset Photos Selection */}
-                <div>
-                  <p className="text-xs font-bold text-gray-700 mb-2">அல்லது மாதிரி புகைப்படத்தைத் தேர்வு செய்க (Or Select Preset Photo):</p>
-                  <div className="flex flex-wrap gap-2.5">
-                    {PRESET_PHOTOS.map((preset) => (
+                {/* Image URL Input & Default Button */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-gray-600 block font-lato">
+                      புகைப்பட சுட்டி (Image URL Path):
+                    </label>
+                    {hasCustomImage && (
                       <button
-                        key={preset.url}
                         type="button"
-                        onClick={() => setForm({ ...form, imageUrl: preset.url, emoji: preset.emoji })}
-                        className={`group relative w-16 h-16 rounded-2xl overflow-hidden border-2 transition-all cursor-pointer ${
-                          form.imageUrl === preset.url
-                            ? "border-brand-orange ring-2 ring-brand-orange/40 scale-105 shadow-md"
-                            : "border-gray-200 bg-white hover:border-gray-300"
-                        }`}
-                        title={preset.name}
+                        onClick={() => setForm({ ...form, imageUrl: "" })}
+                        className="text-xs text-forest-700 hover:text-forest-900 font-bold flex items-center gap-1 cursor-pointer"
                       >
-                        <img src={preset.url} alt={preset.name} className="w-full h-full object-cover" />
-                        <span className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] font-bold text-center py-0.5 truncate px-1">
-                          {preset.name}
-                        </span>
+                        <RotateCcw size={12} /> Use default image
                       </button>
-                    ))}
+                    )}
                   </div>
-                </div>
-
-                {/* Image URL Input */}
-                <div>
-                  <label className="text-xs font-bold text-gray-600 mb-1 block">புகைப்பட சுட்டி (Image URL Path):</label>
                   <input
                     type="text"
                     value={form.imageUrl}
                     onChange={(e) => setForm({ ...form, imageUrl: e.target.value })}
-                    placeholder="/photos/herb.svg or https://example.com/photo.jpg"
-                    className="input-field text-xs font-mono"
+                    placeholder="Leave empty for default eg_icon.png, or paste URL"
+                    className="w-full border border-gray-200 rounded-none px-3 py-2 text-xs font-mono bg-gray-50 text-gray-900"
                   />
+                  <p className="text-[11px] text-gray-500 italic font-lato">
+                    Leave empty to use the default image.
+                  </p>
                 </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label className="label">விலை (Price in ₹) *</label>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato">
+                  விலை (Price in ₹) *
+                </label>
                 <input
                   type="number"
                   min="0"
                   value={form.price}
                   onChange={(e) => setForm({ ...form, price: e.target.value })}
                   placeholder="60"
-                  className={`input-field ${errors.price ? "border-red-400 ring-1 ring-red-400" : ""}`}
+                  className={`w-full border border-gray-200 rounded-none px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-forest focus:border-gold bg-gray-50 text-gray-900 font-medium ${errors.price ? "border-red-400 ring-1 ring-red-400" : ""}`}
                 />
                 {errors.price && (
-                  <p className="text-red-500 text-xs mt-1 font-semibold">{errors.price}</p>
+                  <p className="text-danger text-xs mt-1 font-bold font-lato">{errors.price}</p>
                 )}
               </div>
 
               <div>
-                <label className="label">அளவு (Unit / Weight) *</label>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato">
+                  அளவு (Unit / Weight) *
+                </label>
                 <input
                   type="text"
                   value={form.unit}
                   onChange={(e) => setForm({ ...form, unit: e.target.value })}
                   placeholder="100g, 250g, 500ml, 1 piece"
-                  className="input-field"
+                  className="w-full border border-gray-200 rounded-none px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-forest focus:border-gold bg-gray-50 text-gray-900 font-medium"
                 />
               </div>
 
               <div>
-                <label className="label">இருப்பு (Stock) *</label>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato">
+                  இருப்பு (Stock) *
+                </label>
                 <input
                   type="number"
                   min="0"
                   value={form.stock}
                   onChange={(e) => setForm({ ...form, stock: e.target.value })}
                   placeholder="50"
-                  className={`input-field ${errors.stock ? "border-red-400 ring-1 ring-red-400" : ""}`}
+                  className={`w-full border border-gray-200 rounded-none px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-forest focus:border-gold bg-gray-50 text-gray-900 font-medium ${errors.stock ? "border-red-400 ring-1 ring-red-400" : ""}`}
                 />
                 {errors.stock && (
-                  <p className="text-red-500 text-xs mt-1 font-semibold">{errors.stock}</p>
+                  <p className="text-danger text-xs mt-1 font-bold font-lato">{errors.stock}</p>
                 )}
               </div>
             </div>
 
             <div>
-              <label className="label">Tags (comma-separated)</label>
+              <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5 font-lato">
+                Tags (comma-separated)
+              </label>
               <input
                 type="text"
                 value={form.tags}
                 onChange={(e) => setForm({ ...form, tags: e.target.value })}
                 placeholder="spice, herbal, pooja, immunity"
-                className="input-field"
+                className="w-full border border-gray-200 rounded-none px-3.5 py-2.5 text-sm focus:ring-2 focus:ring-forest focus:border-gold bg-gray-50 text-gray-900 font-medium"
               />
             </div>
           </div>
 
           {/* Categories & Suggestion Groups */}
-          <div className="card p-6 space-y-6">
-            {/* PUBLIC categories */}
+          <div className="bg-white border border-gray-200 rounded-none p-6 space-y-6 shadow-green">
+            {/* PUBLIC categories with 24px round thumbnail */}
             <div>
-              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2">
-                <Tag size={16} className="text-brand-sky" /> பொதுப் பிரிவுகள் (PUBLIC Categories)
+              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2 font-tamil text-base">
+                <Tag size={16} className="text-forest-700" /> பொதுப் பிரிவுகள் (PUBLIC Categories)
               </h3>
-              <p className="text-xs text-gray-500 mb-3">Multi-select: one item can belong to multiple categories</p>
+              <p className="text-xs text-gray-500 mb-3 font-lato">Multi-select: one item can belong to multiple categories</p>
               <div className="flex flex-wrap gap-2">
                 {publicCategories.map((cat) => {
                   const active = form.categoryIds.includes(cat.id);
+                  const catImg = getCategoryImage(cat);
                   return (
                     <button
                       key={cat.id}
                       type="button"
                       onClick={() => toggleCategory(cat.id)}
-                      className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold border-2 transition-all duration-200 cursor-pointer ${
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer ${
                         active
-                          ? "text-white border-transparent shadow-md"
-                          : "bg-white border-gray-200 text-gray-600 hover:border-gray-300"
+                          ? "bg-forest text-cream-100 border-forest shadow-sm"
+                          : "bg-gray-50 border-gray-300 text-gray-700 hover:border-forest-400"
                       }`}
-                      style={active ? { backgroundColor: cat.color, borderColor: cat.color } : {}}
                     >
-                      <span
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: active ? "white" : cat.color }}
-                      />
+                      <div className="w-6 h-6 rounded-full overflow-hidden bg-[#faf6ee] border border-gold/30 flex items-center justify-center flex-shrink-0 p-0.5">
+                        <img
+                          src={catImg}
+                          alt={cat.label}
+                          onError={(e) => {
+                            e.currentTarget.src = EG_ICON;
+                          }}
+                          className="w-full h-full object-contain rounded-full"
+                        />
+                      </div>
                       {cat.label}
                     </button>
                   );
@@ -380,11 +385,11 @@ export default function AdminAddItemPage() {
             </div>
 
             {/* Suggestion Groups Multi-Select */}
-            <div className="border-t border-gray-100 pt-5">
-              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2">
-                <Star size={16} className="text-brand-orange" /> பரிந்துரை குழுக்கள் (Suggestion Groups)
+            <div className="border-t border-gray-200 pt-5">
+              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2 font-tamil text-base">
+                <Star size={16} className="text-gold-600" /> பரிந்துரை குழுக்கள் (Suggestion Groups)
               </h3>
-              <p className="text-xs text-gray-500 mb-3">
+              <p className="text-xs text-gray-500 mb-3 font-lato">
                 Select which home page featured sections should include this item
               </p>
               <div className="flex flex-wrap gap-2">
@@ -395,16 +400,14 @@ export default function AdminAddItemPage() {
                       key={group.id}
                       type="button"
                       onClick={() => toggleGroup(group.id)}
-                      className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold border-2 transition-all duration-200 cursor-pointer ${
+                      className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer ${
                         active
-                          ? "text-white border-transparent shadow-md scale-105"
-                          : "bg-white border-gray-200 text-gray-700 hover:border-gray-300"
+                          ? "bg-gold text-bark-900 border-gold shadow-sm"
+                          : "bg-gray-50 border-gray-300 text-gray-700 hover:border-gray-400"
                       }`}
-                      style={active ? { backgroundColor: group.color, borderColor: group.color } : {}}
                     >
                       <span
-                        className="w-2 h-2 rounded-full"
-                        style={{ backgroundColor: active ? "white" : group.color }}
+                        className={`w-2 h-2 rounded-full ${active ? "bg-forest-700" : "bg-gray-400"}`}
                       />
                       {group.tamilName} ({group.name})
                     </button>
@@ -417,9 +420,7 @@ export default function AdminAddItemPage() {
           {/* Submit */}
           <button
             type="submit"
-            className={`btn-primary w-full py-3 text-base flex items-center justify-center gap-2 cursor-pointer ${
-              saved ? "from-brand-green to-emerald-500" : ""
-            }`}
+            className="w-full bg-forest text-cream-100 hover:bg-forest-700 font-extrabold py-3.5 text-base rounded-none shadow-green flex items-center justify-center gap-2 cursor-pointer transition-all font-lato"
           >
             <Save size={18} />
             {saved ? "சேமிக்கப்பட்டது! (Saved)..." : isEdit ? "பொருளை மாற்று (Update Item)" : "பொருளைச் சேர் (Add Item)"}
@@ -429,12 +430,11 @@ export default function AdminAddItemPage() {
         {/* Live Preview */}
         <div className="xl:col-span-1">
           <div className="sticky top-20">
-            <div className="card p-5 space-y-4">
-              <div className="flex items-center gap-2 text-brand-pink font-bold">
+            <div className="bg-white border border-gray-200 rounded-none p-5 space-y-4 shadow-green">
+              <div className="flex items-center gap-2 text-forest-700 font-bold font-lato">
                 <Eye size={16} /> நேரலை முன்னோட்டம் (Live Preview)
               </div>
 
-              {/* Badges preview */}
               {selectedGroupIds.length > 0 && (
                 <div className="flex flex-wrap gap-1">
                   {selectedGroupIds.map((gid) => {
@@ -443,8 +443,7 @@ export default function AdminAddItemPage() {
                     return (
                       <span
                         key={g.id}
-                        className="text-[10px] font-bold px-2 py-0.5 rounded-full"
-                        style={{ backgroundColor: g.color + "20", color: g.color }}
+                        className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gold-100 text-bark-900 border border-gold"
                       >
                         ★ {g.tamilName}
                       </span>

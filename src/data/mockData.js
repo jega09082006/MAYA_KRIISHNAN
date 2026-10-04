@@ -1,80 +1,63 @@
 // ──────────────────────────────────────────────
-//  MOCK DATA  –  MAYA_KRISHNAN (மாயகிருஷ்ணன்)
-//  பாரம்பரிய பலசரக்கு & நாட்டு மருந்து
-//  (Provisions / Grocery & Country Herbal Medicine)
+//  MOCK DATA – Maya Krishnan (மாயக்கிருஷ்ணன்)
+//  பலசரக்கு & தமிழ்மருந்து கடை
 // ──────────────────────────────────────────────
 
 export const PUBLIC_CATEGORIES = [
   {
     id: "cat-1",
-    label: "Traditional / Grocery (பாரம்பரிய / மளிகை)",
-    shortLabel: "Traditional / Grocery",
-    englishName: "Traditional / Grocery",
-    tamilName: "பாரம்பரிய / மளிகை",
-    color: "#FF7A00",
+    label: "Grocery & Spices (மளிகை & மசாலா)",
+    shortLabel: "Grocery & Spices",
+    englishName: "Grocery & Spices",
+    tamilName: "மளிகை & மசாலா",
+    color: "#2d5a3d",
+    image: "",
   },
   {
     id: "cat-2",
-    label: "Herbal / Traditional (மூலிகை / பாரம்பரியம்)",
-    shortLabel: "Herbal / Traditional",
-    englishName: "Herbal / Traditional",
-    tamilName: "மூலிகை / பாரம்பரியம்",
-    color: "#10B981",
+    label: "Herbs & Flowers (மூலிகை & பூக்கள்)",
+    shortLabel: "Herbs & Flowers",
+    englishName: "Herbs & Flowers",
+    tamilName: "மூலிகை & பூக்கள்",
+    color: "#d99c2b",
+    image: "",
   },
   {
     id: "cat-3",
-    label: "Food / Prepared Product (உணவு / தயாரிப்பு)",
-    shortLabel: "Food / Prepared Product",
-    englishName: "Food / Prepared Product",
-    tamilName: "உணவு / தயாரிப்பு",
-    color: "#FF4D8D",
+    label: "Ready Mixes & Pastes (மாவு & தயார் பொருட்கள்)",
+    shortLabel: "Ready Mixes & Pastes",
+    englishName: "Ready Mixes & Pastes",
+    tamilName: "மாவு & தயார் பொருட்கள்",
+    color: "#b3402a",
+    image: "",
   },
   {
     id: "cat-4",
-    label: "Oil (எண்ணெய்)",
-    shortLabel: "Oil",
-    englishName: "Oil",
+    label: "Oils (எண்ணெய்)",
+    shortLabel: "Oils",
+    englishName: "Oils",
     tamilName: "எண்ணெய்",
-    color: "#F59E0B",
+    color: "#4e4034",
+    image: "",
   },
   {
     id: "cat-5",
-    label: "Medicine / Herbal Product (மருந்து / மூலிகை பொருள்)",
-    shortLabel: "Medicine / Herbal Product",
-    englishName: "Medicine / Herbal Product",
-    tamilName: "மருந்து / மூலிகை பொருள்",
-    color: "#8B5CF6",
+    label: "Tamil Marundhu & Herbal Care (தமிழ் மருந்து & மூலிகை பராமரிப்பு)",
+    shortLabel: "Tamil Marundhu & Herbal Care",
+    englishName: "Tamil Marundhu & Herbal Care",
+    tamilName: "தமிழ் மருந்து & மூலிகை பராமரிப்பு",
+    color: "#1d3d29",
+    image: "",
   },
 ];
 
 
-export const getEmojiGradient = (emoji) => {
-  switch (emoji) {
-    case "🌿":
-      return "from-emerald-400 via-teal-500 to-green-600";
-    case "🌶️":
-      return "from-orange-400 via-amber-500 to-red-500";
-    case "🌾":
-      return "from-amber-300 via-yellow-400 to-orange-400";
-    case "🪔":
-      return "from-purple-400 via-fuchsia-500 to-pink-500";
-    case "🥥":
-      return "from-amber-500 via-stone-500 to-amber-700";
-    case "🧴":
-      return "from-sky-400 via-cyan-500 to-blue-500";
-    case "💊":
-      return "from-rose-400 via-pink-500 to-red-500";
-    default:
-      return "from-orange-400 via-pink-500 to-purple-500";
-  }
-};
-
 // ──────────────────────────────────────────────
-// 66 Authentic Catalogue Items
+// 66 Catalogue Items
 // (placeholder prices, replace later)
 // ──────────────────────────────────────────────
 export const MOCK_ITEMS = [
-  // ── Traditional / Grocery (cat-1) ──────────────────────
+  // ── Grocery & Spices (cat-1) ──────────────────────
   {
     id: "item-1",
     tamilName: "அத்திப்பழம்",
@@ -94,7 +77,7 @@ export const MOCK_ITEMS = [
     price: 85,
     unit: "100g",
     stock: 50,
-    description: "Traditional sweet root for soothing throat and respiratory health. சளி மற்றும் தொண்டை கரகரப்பை போக்கும் அதிமதுரம்.",
+    description: "Sweet root for soothing throat and respiratory health. சளி மற்றும் தொண்டை கரகரப்பை போக்கும் அதிமதுரம்.",
     categoryIds: ["cat-1", "cat-2"],
     emoji: "🌿",
     tags: ["licorice", "throat", "herbal-root", "kashayam"],
@@ -130,7 +113,7 @@ export const MOCK_ITEMS = [
     price: 95,
     unit: "100g",
     stock: 30,
-    description: "Aromatic wild cumin seeds for traditional digestive herbal mixes. செரிமானம் மற்றும் கஷாயத்திற்கு பயன்படும் காட்டு சீரகம்.",
+    description: "Aromatic wild cumin seeds for digestive herbal mixes. செரிமானம் மற்றும் கஷாயத்திற்கு பயன்படும் காட்டு சீரகம்.",
     categoryIds: ["cat-1"],
     emoji: "🌶️",
     tags: ["wild-cumin", "spice", "digestive"],
@@ -154,7 +137,7 @@ export const MOCK_ITEMS = [
     price: 75,
     unit: "100g",
     stock: 45,
-    description: "Classical respiratory herb used in traditional medicinal decoctions. சளி மற்றும் இருமல் நீக்கும் பாரம்பரிய கண்டங்கத்தரி.",
+    description: "Respiratory herb used in medicinal decoctions. சளி மற்றும் இருமல் நீக்கும் கண்டங்கத்தரி.",
     categoryIds: ["cat-1", "cat-2"],
     emoji: "🌿",
     tags: ["kandankathari", "respiratory", "kashayam"],
@@ -166,10 +149,10 @@ export const MOCK_ITEMS = [
     price: 90,
     unit: "100g",
     stock: 25,
-    description: "Traditional sun-dried herbal tuber root. பாரம்பரிய மருத்துவ பலன்கள் கொண்ட கார கீழங்கு.",
+    description: "Sun-dried herbal tuber root. மருத்துவ பலன்கள் கொண்ட கார கீழங்கு.",
     categoryIds: ["cat-1"],
     emoji: "🌿",
-    tags: ["tuber", "root", "traditional"],
+    tags: ["tuber", "root", "herbal"],
   },
   {
     id: "item-9",
@@ -226,7 +209,7 @@ export const MOCK_ITEMS = [
     price: 160,
     unit: "100g",
     stock: 35,
-    description: "Ancient medicinal spice for lung health and classical rasam. நுரையீரல் பலப்படுத்தும் காரசாரமான திப்பிலி.",
+    description: "Medicinal spice for lung health and classical rasam. நுரையீரல் பலப்படுத்தும் காரசாரமான திப்பிலி.",
     categoryIds: ["cat-1", "cat-2"],
     emoji: "🌶️",
     tags: ["thippili", "long-pepper", "kashayam", "spice"],
@@ -262,7 +245,7 @@ export const MOCK_ITEMS = [
     price: 130,
     unit: "100g",
     stock: 45,
-    description: "Naturally cooling root for refreshing summer sarbath. உடல் சூடு தணிக்கும் பாரம்பரிய நன்னாரி வேர்.",
+    description: "Naturally cooling root for refreshing summer sarbath. உடல் சூடு தணிக்கும் நன்னாரி வேர்.",
     categoryIds: ["cat-1", "cat-2"],
     emoji: "🌿",
     tags: ["nannari", "cooling", "sarbath", "root"],
@@ -274,7 +257,7 @@ export const MOCK_ITEMS = [
     price: 55,
     unit: "100g",
     stock: 30,
-    description: "Traditional folk remedy seeds for external herbal pastes. நாட்டு மருந்து தயாரிப்பில் பயன்படும் நாய்க்கடுகு.",
+    description: "Folk remedy seeds for external herbal pastes. மருந்து தயாரிப்பில் பயன்படும் நாய்க்கடுகு.",
     categoryIds: ["cat-1"],
     emoji: "🌶️",
     tags: ["naai-kadugu", "seeds", "herbal"],
@@ -310,10 +293,10 @@ export const MOCK_ITEMS = [
     price: 70,
     unit: "100g",
     stock: 25,
-    description: "Natural mineral rich sea foam blocks for traditional dental and skin recipes. பல் துலக்குதல் மற்றும் மருந்துகளுக்கு உகந்த கடல் நுரை.",
+    description: "Natural mineral rich sea foam blocks for dental and skin recipes. பல் துலக்குதல் மற்றும் மருந்துகளுக்கு உகந்த கடல் நுரை.",
     categoryIds: ["cat-1"],
     emoji: "🌿",
-    tags: ["kadal-nurai", "mineral", "traditional"],
+    tags: ["kadal-nurai", "mineral", "natural"],
   },
   {
     id: "item-21",
@@ -334,10 +317,10 @@ export const MOCK_ITEMS = [
     price: 110,
     unit: "500g",
     stock: 40,
-    description: "Traditional indigenous black paddy grain with rich nutrient value. நோய் எதிர்ப்பு சக்தி தரும் பாரம்பரிய கருப்பு நெல்.",
+    description: "Indigenous black paddy grain with rich nutrient value. நோய் எதிர்ப்பு சக்தி தரும் கருப்பு நெல்.",
     categoryIds: ["cat-1"],
     emoji: "🌾",
-    tags: ["black-paddy", "heritage-grain", "nutrition"],
+    tags: ["black-paddy", "grain", "nutrition"],
   },
   {
     id: "item-23",
@@ -382,7 +365,7 @@ export const MOCK_ITEMS = [
     price: 30,
     unit: "200g",
     stock: 80,
-    description: "Natural mineral stone used for temple borders and traditional rangoli. கோவில் வாசல்படி மற்றும் கோலங்களுக்குரிய காவிக்கல்.",
+    description: "Natural mineral stone used for temple borders and rangoli. கோவில் வாசல்படி மற்றும் கோலங்களுக்குரிய காவிக்கல்.",
     categoryIds: ["cat-1"],
     emoji: "🪔",
     tags: ["kaavikal", "red-ochre", "pooja", "kolam"],
@@ -442,7 +425,7 @@ export const MOCK_ITEMS = [
     price: 130,
     unit: "100g",
     stock: 25,
-    description: "Raw dhoop resin crystals for insect repelling fragrant fumigation. பாரம்பரிய நறுமணப் புகைக்கான துரும்பு நுங்கிலியம்.",
+    description: "Raw dhoop resin crystals for insect repelling fragrant fumigation. நறுமணப் புகைக்கான துரும்பு நுங்கிலியம்.",
     categoryIds: ["cat-1"],
     emoji: "🪔",
     tags: ["thurumbu-nungiliyam", "pooja", "dhoop"],
@@ -502,7 +485,7 @@ export const MOCK_ITEMS = [
     price: 120,
     unit: "500ml",
     stock: 35,
-    description: "Sacred cow-derived preparation for temple homams and organic soil vitality. புனிதமான பாரம்பரிய பஞ்சகாவியம்.",
+    description: "Sacred cow-derived preparation for temple homams and organic soil vitality. புனிதமான பஞ்சகாவியம்.",
     categoryIds: ["cat-1"],
     emoji: "🪔",
     tags: ["panchagavyam", "pooja", "homam", "organic"],
@@ -526,13 +509,13 @@ export const MOCK_ITEMS = [
     price: 350,
     unit: "1 kit",
     stock: 20,
-    description: "Curated household kit of traditional Tamil country herbal essentials. பாரம்பரிய நாட்டு மருந்து மூலிகைகளின் முழுமையான தொகுப்பு.",
+    description: "Curated household kit of Tamil herbal essentials. தமிழ் மருந்து மூலிகைகளின் முழுமையான தொகுப்பு.",
     categoryIds: ["cat-1", "cat-2", "cat-5"],
     emoji: "🌿",
-    tags: ["country-medicine", "herbal", "traditional", "wellness"],
+    tags: ["country-medicine", "herbal", "wellness"],
   },
 
-  // ── Herbal / Traditional (cat-2) ──────────────────────
+  // ── Herbs & Flowers (cat-2) ──────────────────────
   {
     id: "item-39",
     tamilName: "ஆவாரம் பூ",
@@ -564,7 +547,7 @@ export const MOCK_ITEMS = [
     price: 90,
     unit: "100g",
     stock: 30,
-    description: "Sacred peepal tree seeds used in classical vitality tonics. பாரம்பரிய மருத்துவத்தில் பயன்படும் புனித அரசு விதை.",
+    description: "Sacred peepal tree seeds used in vitality tonics. மருத்துவத்தில் பயன்படும் புனித அரசு விதை.",
     categoryIds: ["cat-2"],
     emoji: "🌾",
     tags: ["arasu", "peepal", "herbal-seed"],
@@ -576,7 +559,7 @@ export const MOCK_ITEMS = [
     price: 65,
     unit: "200g",
     stock: 40,
-    description: "Raw castor seeds used in traditional pressing for body cooling oils. தலைமுடி மற்றும் உடல் குளிர்ச்சி தரும் ஆமணக்கு விதை.",
+    description: "Raw castor seeds used for pressing body cooling oils. தலைமுடி மற்றும் உடல் குளிர்ச்சி தரும் ஆமணக்கு விதை.",
     categoryIds: ["cat-2"],
     emoji: "🌾",
     tags: ["castor-seed", "haircare", "cooling"],
@@ -588,7 +571,7 @@ export const MOCK_ITEMS = [
     price: 120,
     unit: "50g",
     stock: 25,
-    description: "Fragrant herbal flower buds used in Ayurvedic rejuvenating lehyams. நறுமணமும் மருத்துவ குணமும் கொண்ட சிறுநாகப்பூ.",
+    description: "Fragrant herbal flower buds used in rejuvenating lehyams. நறுமணமும் மருத்துவ குணமும் கொண்ட சிறுநாகப்பூ.",
     categoryIds: ["cat-2"],
     emoji: "🌿",
     tags: ["siru-naga-poo", "herbal", "fragrant"],
@@ -624,7 +607,7 @@ export const MOCK_ITEMS = [
     price: 80,
     unit: "100g",
     stock: 45,
-    description: "Traditional herbal flower water infusion for supporting blood sugar balance. சர்க்கரை அளவை சமன் செய்யும் பன்னீர் பூ.",
+    description: "Herbal flower infusion for supporting blood sugar balance. சர்க்கரை அளவை சமன் செய்யும் பன்னீர் பூ.",
     categoryIds: ["cat-2", "cat-5"],
     emoji: "🌿",
     tags: ["panneer-poo", "diabetes-care", "herbal"],
@@ -666,7 +649,7 @@ export const MOCK_ITEMS = [
     tags: ["sambrani", "benzoin", "dhoop", "incense", "pooja"],
   },
 
-  // ── Food / Prepared Product (cat-3) ───────────────────
+  // ── Ready Mixes & Pastes (cat-3) ───────────────────
   {
     id: "item-50",
     tamilName: "புட்டு மாவு",
@@ -674,10 +657,10 @@ export const MOCK_ITEMS = [
     price: 65,
     unit: "500g",
     stock: 70,
-    description: "Freshly milled roasted rice flour blend for soft aromatic traditional puttu. மிருதுவான சுவையான புட்டு மாவு.",
+    description: "Freshly milled roasted rice flour blend for soft aromatic puttu. மிருதுவான சுவையான புட்டு மாவு.",
     categoryIds: ["cat-3"],
     emoji: "🌾",
-    tags: ["puttu-flour", "breakfast", "traditional-food"],
+    tags: ["puttu-flour", "breakfast", "ready-mix"],
   },
   {
     id: "item-51",
@@ -686,7 +669,7 @@ export const MOCK_ITEMS = [
     price: 70,
     unit: "500g",
     stock: 60,
-    description: "Multigrain and protein-rich lentil coarse mix for crispy South Indian adai. சத்துக்கள் நிறைந்த பாரம்பரிய அடை தோசை மாவு.",
+    description: "Multigrain and protein-rich lentil coarse mix for crispy South Indian adai. சத்துக்கள் நிறைந்த அடை தோசை மாவு.",
     categoryIds: ["cat-3"],
     emoji: "🌾",
     tags: ["adai-mix", "dosa", "protein", "multigrain"],
@@ -758,7 +741,7 @@ export const MOCK_ITEMS = [
     price: 45,
     unit: "200g",
     stock: 80,
-    description: "Rich concentrated ripe tomato paste for instant traditional gravies and rasam. சுவையான சமையல் தக்காளி பேஸ்ட்.",
+    description: "Rich concentrated ripe tomato paste for instant gravies and rasam. சுவையான சமையல் தக்காளி பேஸ்ட்.",
     categoryIds: ["cat-3"],
     emoji: "🌶️",
     tags: ["tomato-paste", "curry", "kitchen-staple"],
@@ -770,7 +753,7 @@ export const MOCK_ITEMS = [
     price: 60,
     unit: "200g",
     stock: 65,
-    description: "Authentic Chettinad spicy and tangy vathakulambu ready-mix paste. நாவில் எச்சில் ஊறும் சுவையான வத்தக்குழம்பு பேஸ்ட்.",
+    description: "Spicy and tangy vathakulambu ready-mix paste. நாவில் எச்சில் ஊறும் சுவையான வத்தக்குழம்பு பேஸ்ட்.",
     categoryIds: ["cat-3"],
     emoji: "🌶️",
     tags: ["vathakuzhambu", "paste", "south-indian", "tasty"],
@@ -812,7 +795,7 @@ export const MOCK_ITEMS = [
     tags: ["rose-milk", "summer-drink", "flavour"],
   },
 
-  // ── Oil (cat-4) ───────────────────────────────────────
+  // ── Oils (cat-4) ───────────────────────────────────────
   {
     id: "item-62",
     tamilName: "கருஞ்சீரக எண்ணெய்",
@@ -826,7 +809,7 @@ export const MOCK_ITEMS = [
     tags: ["black-cumin-oil", "kalonji", "cold-pressed", "pure-oil"],
   },
 
-  // ── Medicine / Herbal Product (cat-5) ─────────────────
+  // ── Tamil Marundhu & Herbal Care (cat-5) ─────────────────
   {
     id: "item-63",
     tamilName: "சோலைமலை ASMIN Cough Syrup",
@@ -846,7 +829,7 @@ export const MOCK_ITEMS = [
     price: 280,
     unit: "100g",
     stock: 35,
-    description: "Classical herbal botanical mix for metabolic sugar support. சர்க்கரை அளவை கட்டுப்படுத்தும் சோலைமலை விஜய்ஸ் சர்க்கரை கொல்லி.",
+    description: "Herbal botanical mix for metabolic sugar support. சர்க்கரை அளவை கட்டுப்படுத்தும் சோலைமலை விஜய்ஸ் சர்க்கரை கொல்லி.",
     categoryIds: ["cat-5"],
     emoji: "💊",
     tags: ["sugar-control", "diabetes-care", "solaimalai", "powder"],
@@ -870,10 +853,10 @@ export const MOCK_ITEMS = [
     price: 190,
     unit: "200g",
     stock: 45,
-    description: "Classical Ayurvedic herbal jam for respiratory vitality and chest congestion. சளி, ஆஸ்துமா மற்றும் இருமல் நீக்கும் கண்டங்கத்தரி லேகியம்.",
+    description: "Herbal jam for respiratory vitality and chest congestion. சளி, ஆஸ்துமா மற்றும் இருமல் நீக்கும் கண்டங்கத்தரி லேகியம்.",
     categoryIds: ["cat-5"],
     emoji: "💊",
-    tags: ["kandankathari-legiyam", "solaimalai", "respiratory", "ayurvedic-jam"],
+    tags: ["kandankathari-legiyam", "solaimalai", "respiratory", "herbal-jam"],
   },
 ];
 
@@ -885,7 +868,8 @@ export const MOCK_SUGGESTION_GROUPS = [
     id: "sug-1",
     name: "Festival & Pooja Specials",
     tamilName: "பண்டிகை & பூஜை சிறப்பு",
-    color: "#9C27B0",
+    color: "#d99c2b",
+    image: "",
     isActive: true,
     order: 1,
     itemIds: ["item-47", "item-49", "item-44", "item-45", "item-33", "item-15", "item-35", "item-3"],
@@ -894,7 +878,8 @@ export const MOCK_SUGGESTION_GROUPS = [
     id: "sug-2",
     name: "Diabetes Care",
     tamilName: "சர்க்கரை நோய் பராமரிப்பு",
-    color: "#10B981",
+    color: "#2d5a3d",
+    image: "",
     isActive: true,
     order: 2,
     itemIds: ["item-64", "item-65", "item-16", "item-39", "item-6", "item-46"],
@@ -903,7 +888,8 @@ export const MOCK_SUGGESTION_GROUPS = [
     id: "sug-3",
     name: "Cough & Cold Remedies",
     tamilName: "சளி இருமல் நிவாரணம்",
-    color: "#0284C7",
+    color: "#b3402a",
+    image: "",
     isActive: true,
     order: 3,
     itemIds: ["item-63", "item-2", "item-13", "item-66", "item-11", "item-10", "item-7"],
@@ -912,7 +898,8 @@ export const MOCK_SUGGESTION_GROUPS = [
     id: "sug-4",
     name: "Daily Kitchen Essentials",
     tamilName: "அன்றாட சமையல்",
-    color: "#FF7A00",
+    color: "#4e4034",
+    image: "",
     isActive: true,
     order: 4,
     itemIds: ["item-37", "item-29", "item-25", "item-14", "item-50", "item-51", "item-57", "item-34"],
@@ -930,7 +917,7 @@ export const MOCK_CUSTOMERS = [
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Lakshmi",
     phone: "+91 98421 12345",
     status: "active",
-    joinedAt: "2024-01-15",
+    joinedAt: "2025-01-15",
     totalOrders: 8,
     totalSpent: 4260,
     address: "14 West Masi Street, Madurai, TN 625001",
@@ -942,7 +929,7 @@ export const MOCK_CUSTOMERS = [
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Murugan",
     phone: "+91 94432 23456",
     status: "active",
-    joinedAt: "2024-03-22",
+    joinedAt: "2025-03-22",
     totalOrders: 5,
     totalSpent: 2870,
     address: "28 Salai Road, Thillai Nagar, Trichy, TN 620018",
@@ -954,7 +941,7 @@ export const MOCK_CUSTOMERS = [
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Kavitha",
     phone: "+91 98840 34567",
     status: "active",
-    joinedAt: "2024-05-10",
+    joinedAt: "2025-05-10",
     totalOrders: 12,
     totalSpent: 6400,
     address: "9 2nd Main Road, Anna Nagar, Chennai, TN 600040",
@@ -966,7 +953,7 @@ export const MOCK_CUSTOMERS = [
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Senthil",
     phone: "+91 97890 45678",
     status: "active",
-    joinedAt: "2023-11-01",
+    joinedAt: "2025-11-01",
     totalOrders: 4,
     totalSpent: 2100,
     address: "55 DB Road, RS Puram, Coimbatore, TN 641002",
@@ -978,7 +965,7 @@ export const MOCK_CUSTOMERS = [
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=PriyaR",
     phone: "+91 94862 56789",
     status: "active",
-    joinedAt: "2024-07-14",
+    joinedAt: "2025-07-14",
     totalOrders: 6,
     totalSpent: 3350,
     address: "12 Saradha College Road, Salem, TN 636016",
@@ -990,7 +977,7 @@ export const MOCK_CUSTOMERS = [
     avatar: "https://api.dicebear.com/9.x/avataaars/svg?seed=Ramesh",
     phone: "+91 96290 67890",
     status: "active",
-    joinedAt: "2024-02-28",
+    joinedAt: "2025-02-28",
     totalOrders: 9,
     totalSpent: 4900,
     address: "7 South Main Street, Thanjavur, TN 613001",
@@ -999,25 +986,25 @@ export const MOCK_CUSTOMERS = [
 
 export const MOCK_ORDERS = {
   "cust-1": [
-    { id: "ord-101", date: "2024-09-10", items: ["item-37", "item-29"], total: 280, status: "completed" },
-    { id: "ord-102", date: "2024-10-01", items: ["item-6", "item-62"], total: 330, status: "processing" },
+    { id: "ord-101", date: "2026-08-10", items: ["item-37", "item-29"], total: 280, status: "completed" },
+    { id: "ord-102", date: "2026-09-28", items: ["item-6", "item-62"], total: 330, status: "processing" },
   ],
   "cust-2": [
-    { id: "ord-201", date: "2024-08-20", items: ["item-29", "item-33", "item-34"], total: 690, status: "completed" },
-    { id: "ord-202", date: "2024-09-15", items: ["item-50", "item-51"], total: 135, status: "completed" },
+    { id: "ord-201", date: "2026-07-20", items: ["item-29", "item-33", "item-34"], total: 690, status: "completed" },
+    { id: "ord-202", date: "2026-09-15", items: ["item-50", "item-51"], total: 135, status: "completed" },
   ],
   "cust-3": [
-    { id: "ord-301", date: "2024-09-25", items: ["item-63", "item-66"], total: 310, status: "completed" },
-    { id: "ord-302", date: "2024-10-02", items: ["item-39", "item-48"], total: 145, status: "processing" },
+    { id: "ord-301", date: "2026-09-20", items: ["item-63", "item-66"], total: 310, status: "completed" },
+    { id: "ord-302", date: "2026-10-02", items: ["item-39", "item-48"], total: 145, status: "processing" },
   ],
   "cust-4": [
-    { id: "ord-401", date: "2024-06-14", items: ["item-62"], total: 220, status: "completed" },
+    { id: "ord-401", date: "2026-06-14", items: ["item-62"], total: 220, status: "completed" },
   ],
   "cust-5": [
-    { id: "ord-501", date: "2024-09-30", items: ["item-50", "item-51", "item-53"], total: 200, status: "completed" },
+    { id: "ord-501", date: "2026-09-30", items: ["item-50", "item-51", "item-53"], total: 200, status: "completed" },
   ],
   "cust-6": [
-    { id: "ord-601", date: "2024-09-05", items: ["item-38", "item-6"], total: 460, status: "completed" },
+    { id: "ord-601", date: "2026-09-05", items: ["item-38", "item-6"], total: 460, status: "completed" },
   ],
 };
 
@@ -1030,8 +1017,8 @@ export const MOCK_OFFERS = [
     name: "மஞ்சள் 15% off for Lakshmi",
     discountType: "percent",
     discountValue: 15,
-    startDate: "2024-10-01",
-    endDate: "2024-12-31",
+    startDate: "2026-10-01",
+    endDate: "2027-03-31",
     isActive: true,
   },
   {
@@ -1041,8 +1028,8 @@ export const MOCK_OFFERS = [
     itemIds: ["item-29", "item-33", "item-34"], // கிராம்பு + ஜாதிக்காய் + ஜாதிப்பத்திரி
     name: "கிராம்பு + ஜாதிக்காய் + ஜாதிப்பத்திரி Spice Combo",
     comboPrice: 599,
-    startDate: "2024-10-01",
-    endDate: "2024-11-30",
+    startDate: "2026-10-01",
+    endDate: "2027-01-31",
     isActive: true,
   },
   {
@@ -1053,8 +1040,8 @@ export const MOCK_OFFERS = [
     name: "சோலைமலை ASMIN Cough Syrup ₹30 Flat Off",
     discountType: "flat",
     discountValue: 30,
-    startDate: "2024-10-01",
-    endDate: "2024-10-31",
+    startDate: "2026-10-01",
+    endDate: "2027-01-31",
     isActive: true,
   },
   {
@@ -1065,8 +1052,8 @@ export const MOCK_OFFERS = [
     name: "கருஞ்சீரக எண்ணெய் 10% off for Senthil",
     discountType: "percent",
     discountValue: 10,
-    startDate: "2024-10-01",
-    endDate: "2024-11-30",
+    startDate: "2026-10-01",
+    endDate: "2027-01-31",
     isActive: true,
   },
   {
@@ -1074,10 +1061,10 @@ export const MOCK_OFFERS = [
     customerId: "cust-5",
     type: "combo",
     itemIds: ["item-50", "item-51"], // புட்டு மாவு + அடை தோசை மாவு
-    name: "புட்டு மாவு + அடை தோசை மாவு Traditional Flour Combo",
+    name: "புட்டு மாவு + அடை தோசை மாவு Flour Combo",
     comboPrice: 115,
-    startDate: "2024-10-01",
-    endDate: "2024-12-15",
+    startDate: "2026-10-01",
+    endDate: "2027-03-15",
     isActive: true,
   },
   {
@@ -1088,8 +1075,8 @@ export const MOCK_OFFERS = [
     name: "நாட்டு மருந்துப் பொருட்கள் 20% off for Ramesh",
     discountType: "percent",
     discountValue: 20,
-    startDate: "2024-10-01",
-    endDate: "2024-12-31",
+    startDate: "2026-10-01",
+    endDate: "2027-03-31",
     isActive: true,
   },
 ];

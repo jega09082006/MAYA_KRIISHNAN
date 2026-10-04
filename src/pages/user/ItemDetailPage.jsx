@@ -6,14 +6,16 @@ import {
   Tag,
   CheckCircle,
   Package,
-  Leaf,
 } from "lucide-react";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import OfferBadge from "../../components/OfferBadge";
 import ItemCard from "../../components/ItemCard";
+import PageTransition from "../../components/PageTransition";
+import FloatingCallButton from "../../components/FloatingCallButton";
+import { GoldLotusOrnament } from "../../components/GoldLotusOrnament";
 import { useStore } from "../../context/StoreContext";
-import { getEmojiGradient } from "../../data/mockData";
+import { getItemImage, EG_ICON } from "../../utils/images";
 
 export default function ItemDetailPage() {
   const { id } = useParams();
@@ -33,13 +35,19 @@ export default function ItemDetailPage() {
 
   if (!item) {
     return (
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen flex flex-col bg-storefront text-bark-900 font-lato">
         <Navbar />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-6xl mb-4">🌿</div>
-            <h2 className="text-2xl font-bold text-gray-700 mb-4">பொருள் கிடைக்கவில்லை (Item not found)</h2>
-            <button onClick={() => navigate("/shop")} className="btn-primary cursor-pointer">
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="text-center p-8 bg-[#faf6ee] border border-bark-200 shadow-green rounded-none max-w-sm w-full">
+            <img
+              src={EG_ICON}
+              alt="Default Icon"
+              className="w-16 h-16 mx-auto mb-4 object-contain"
+            />
+            <h2 className="text-xl font-bold font-tamil text-bark-900 mb-4">
+              பொருள் கிடைக்கவில்லை (Item not found)
+            </h2>
+            <button onClick={() => navigate("/shop")} className="btn-primary rounded-none cursor-pointer w-full min-h-[44px]">
               Back to Catalogue
             </button>
           </div>
@@ -62,7 +70,7 @@ export default function ItemDetailPage() {
         i.id !== item.id &&
         (i.categoryIds || i.publicCategories || []).some((c) => itemCats.includes(c))
     )
-    .slice(0, 4);
+    .slice(0, 6);
 
   function handleAdd() {
     for (let i = 0; i < qty; i++) addToCart(item);
@@ -71,71 +79,57 @@ export default function ItemDetailPage() {
   }
 
   const savings = hasOffer ? item.price - discountedPrice : 0;
-  const gradientClass = getEmojiGradient(item.emoji);
+  const hasCustomImage = Boolean(item.image || item.imageUrl);
+  const imgSrc = getItemImage(item);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8faff]">
+    <PageTransition className="min-h-screen flex flex-col bg-storefront text-bark-900 pb-20 sm:pb-0">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full box-border">
         {/* Breadcrumb */}
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-sm text-gray-500 hover:text-brand-orange transition-colors mb-6 cursor-pointer font-medium"
+          className="flex items-center gap-2 text-sm text-bark-500 hover:text-forest-700 transition-colors mb-4 sm:mb-6 cursor-pointer font-bold font-lato min-h-[44px]"
         >
-          <ArrowLeft size={16} /> பின்செல்ல (Back)
+          <ArrowLeft size={18} /> பின்செல்ல (Back)
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Emoji Tile Display */}
-          <div
-            className={`card overflow-hidden rounded-3xl aspect-square relative group bg-gradient-to-br ${gradientClass} flex items-center justify-center shadow-lg`}
-          >
-            <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/20 rounded-full blur-md pointer-events-none" />
-            <div className="absolute -left-10 -top-10 w-40 h-40 bg-white/15 rounded-full blur-md pointer-events-none" />
-
-            {(() => {
-              const photoUrl =
-                item.imageUrl ||
-                item.image ||
-                (item.emoji === "🌿" ? "/photos/herb.svg" :
-                 item.emoji === "🌶️" ? "/photos/spice.svg" :
-                 item.emoji === "🌾" ? "/photos/grocery.svg" :
-                 item.emoji === "🪔" ? "/photos/pooja.svg" :
-                 item.emoji === "🧴" ? "/photos/oil.svg" :
-                 item.emoji === "💊" ? "/photos/medicine.svg" :
-                 "/photos/grocery.svg");
-              return (
-                <img
-                  src={photoUrl}
-                  alt={item.tamilName || item.englishName}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              );
-            })()}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
+          {/* Product Image Square Display */}
+          <div className="bg-[#faf6ee] border border-bark-200 rounded-none aspect-square relative group flex items-center justify-center shadow-green overflow-hidden w-full max-w-md mx-auto lg:max-w-none">
+            <img
+              src={imgSrc}
+              alt={item.tamilName || item.englishName}
+              onError={(e) => {
+                e.currentTarget.src = EG_ICON;
+              }}
+              className={`w-full h-full ${
+                hasCustomImage ? "object-cover" : "object-contain p-6"
+              } transition-transform duration-300`}
+            />
 
             {hasOffer && (
-              <div className="absolute top-4 left-4">
+              <div className="absolute top-3 left-3 z-10">
                 <OfferBadge offer={offer} originalPrice={item.price} />
               </div>
             )}
 
             {item.unit && (
-              <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md text-white text-xs font-bold px-3 py-1 rounded-lg">
+              <div className="absolute bottom-3 right-3 bg-forest-700/90 text-cream-100 text-xs font-bold px-3 py-1 rounded-full font-lato">
                 அளவு: {item.unit}
               </div>
             )}
           </div>
 
           {/* Details */}
-          <div className="flex flex-col gap-4 animate-slide-up">
+          <div className="flex flex-col gap-4 font-lato">
             {/* Categories & Suggestion Badges */}
-            <div className="flex flex-wrap gap-2 items-center">
+            <div className="flex flex-wrap gap-1.5 items-center">
               {cats.map((c) => (
                 <span
                   key={c.id}
-                  className="text-xs font-semibold px-3 py-1 rounded-full"
-                  style={{ backgroundColor: c.color + "20", color: c.color }}
+                  className="text-xs font-bold px-3 py-1 rounded-full bg-forest-100 text-forest-800"
                 >
                   {c.label}
                 </span>
@@ -143,60 +137,59 @@ export default function ItemDetailPage() {
               {memberGroups.map((g) => (
                 <span
                   key={g.id}
-                  className="text-xs font-semibold px-3 py-1 rounded-full border"
-                  style={{ borderColor: g.color, color: g.color, backgroundColor: g.color + "12" }}
+                  className="text-xs font-bold px-3 py-1 rounded-full bg-gold-100 text-bark-900 border border-gold"
                 >
                   ★ {g.tamilName}
                 </span>
               ))}
             </div>
 
-            {/* Tamil Name (Primary) & English Name (Secondary) */}
+            {/* Tamil Name (Primary ~24px) & English Name (Secondary) */}
             <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-snug">
+              <h1 className="text-2xl sm:text-4xl font-extrabold font-tamil text-bark-900 leading-snug">
                 {item.tamilName}
               </h1>
-              <p className="text-lg text-gray-500 font-semibold mt-1">
+              <p className="text-sm sm:text-lg text-bark-500 font-lato font-normal mt-1">
                 {item.englishName}
               </p>
             </div>
 
             {/* Price Box */}
-            <div className="card bg-gradient-to-r from-orange-50 to-pink-50 border border-orange-100 p-5">
-              <div className="flex items-baseline gap-3">
-                <span className="text-3xl sm:text-4xl font-extrabold text-gray-900">
+            <div className="bg-[#faf6ee] border border-bark-200 p-4 sm:p-5 rounded-none shadow-green">
+              <div className="flex items-baseline gap-3 flex-wrap">
+                <span className="text-2xl sm:text-4xl font-extrabold text-forest-700 font-catamaran">
                   ₹{discountedPrice.toLocaleString()}
                 </span>
                 {hasOffer && (
                   <>
-                    <span className="text-xl text-gray-400 line-through">
+                    <span className="text-lg text-bark-400 line-through font-lato">
                       ₹{item.price.toLocaleString()}
                     </span>
-                    <span className="badge-orange">
+                    <span className="bg-gold text-bark-900 text-xs font-extrabold px-2.5 py-1 rounded-full font-lato">
                       தள்ளுபடி ₹{savings.toLocaleString()}!
                     </span>
                   </>
                 )}
                 {item.unit && (
-                  <span className="text-sm font-semibold text-gray-500">
+                  <span className="text-xs sm:text-sm font-semibold text-bark-500 font-lato">
                     / {item.unit}
                   </span>
                 )}
               </div>
               {hasOffer && (
-                <div className="mt-3 flex items-center gap-2">
+                <div className="mt-2.5 flex items-center gap-2">
                   <OfferBadge offer={offer} originalPrice={item.price} />
-                  <span className="text-sm text-gray-700 font-semibold">{offer.name}</span>
+                  <span className="text-xs sm:text-sm text-bark-700 font-bold font-lato">{offer.name}</span>
                 </div>
               )}
             </div>
 
             {/* Description */}
-            <div className="bg-white p-4 rounded-2xl border border-gray-100 space-y-1">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+            <div className="bg-[#faf6ee] p-4 rounded-none border border-bark-200 space-y-1">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-bark-400 font-lato">
                 பொருள் விளக்கம் (Product Description)
               </h3>
-              <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
+              <p className="text-bark-800 leading-relaxed text-sm font-lato">
                 {item.description}
               </p>
             </div>
@@ -205,7 +198,7 @@ export default function ItemDetailPage() {
             {item.tags?.length > 0 && (
               <div className="flex flex-wrap gap-1.5">
                 {item.tags.map((tag) => (
-                  <span key={tag} className="flex items-center gap-1 badge-sky text-xs">
+                  <span key={tag} className="flex items-center gap-1 bg-forest-100 text-forest-800 text-xs font-bold px-2.5 py-1 rounded-full">
                     <Tag size={10} /> {tag}
                   </span>
                 ))}
@@ -214,10 +207,10 @@ export default function ItemDetailPage() {
 
             {/* Stock */}
             <div className="flex items-center gap-2">
-              <Package size={16} className={item.stock > 10 ? "text-emerald-600" : "text-amber-600"} />
+              <Package size={16} className={item.stock > 10 ? "text-forest-700" : "text-danger"} />
               <span
-                className={`text-sm font-semibold ${
-                  item.stock > 10 ? "text-emerald-600" : "text-amber-600"
+                className={`text-xs sm:text-sm font-bold ${
+                  item.stock > 10 ? "text-forest-700" : "text-danger"
                 }`}
               >
                 {item.stock > 10
@@ -226,32 +219,35 @@ export default function ItemDetailPage() {
               </span>
             </div>
 
-            {/* Qty + Add to Cart */}
-            <div className="flex items-center gap-4 flex-wrap pt-2">
-              <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden bg-white">
+            {/* Qty Stepper & Desktop Add Button */}
+            <div className="flex items-center gap-3 flex-wrap pt-2">
+              <div className="flex items-center border border-bark-200 rounded-none bg-cream-50 min-h-[44px]">
                 <button
+                  type="button"
                   onClick={() => setQty(Math.max(1, qty - 1))}
-                  className="px-4 py-2.5 text-gray-600 hover:bg-gray-100 text-lg font-bold transition-colors cursor-pointer"
+                  className="w-11 h-11 flex items-center justify-center text-bark-800 hover:bg-forest-100 text-xl font-extrabold cursor-pointer"
                 >
                   −
                 </button>
-                <span className="px-5 py-2.5 font-bold text-gray-800 text-base border-x-2 border-gray-200 min-w-[48px] text-center">
+                <span className="px-4 font-bold text-bark-900 text-base border-x border-bark-200 min-w-[44px] text-center font-catamaran">
                   {qty}
                 </span>
                 <button
+                  type="button"
                   onClick={() => setQty(Math.min(item.stock, qty + 1))}
-                  className="px-4 py-2.5 text-gray-600 hover:bg-gray-100 text-lg font-bold transition-colors cursor-pointer"
+                  className="w-11 h-11 flex items-center justify-center text-bark-800 hover:bg-forest-100 text-xl font-extrabold cursor-pointer"
                 >
                   +
                 </button>
               </div>
 
               <button
+                type="button"
                 onClick={handleAdd}
-                className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-base transition-all duration-300 cursor-pointer ${
+                className={`hidden sm:flex flex-1 items-center justify-center gap-2 py-3 rounded-none font-extrabold text-base transition-all duration-300 cursor-pointer shadow-green min-h-[44px] ${
                   added
-                    ? "bg-emerald-600 text-white scale-95"
-                    : "btn-primary text-base"
+                    ? "bg-forest-700 text-cream-100"
+                    : "bg-gold text-bark-900 hover:bg-gold-600"
                 }`}
               >
                 {added ? (
@@ -268,25 +264,62 @@ export default function ItemDetailPage() {
           </div>
         </div>
 
-        {/* Related Items */}
+        {/* Related Items (Horizontal Swipe Row on mobile) */}
         {related.length > 0 && (
-          <section className="mt-16 pt-8 border-t border-gray-200">
-            <div className="flex items-center gap-2 mb-6">
-              <Leaf size={20} className="text-emerald-600" />
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                தொடர்புடைய பொருட்கள் (Related Products)
+          <section className="mt-12 pt-6 border-t border-gold/30 space-y-4">
+            <div className="flex items-center gap-2.5">
+              <GoldLotusOrnament size={20} />
+              <h2 className="text-lg sm:text-2xl font-extrabold font-tamil text-bark-900">
+                தொடர்புடைய பொருட்கள் <span className="font-playfair text-base font-normal text-forest-700 ml-1">(Related Products)</span>
               </h2>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+
+            {/* Mobile horizontal snap row */}
+            <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0">
               {related.map((r) => (
-                <ItemCard key={r.id} item={r} showCategories={true} />
+                <div key={r.id} className="snap-start w-[155px] sm:w-auto shrink-0">
+                  <ItemCard item={r} showCategories={true} />
+                </div>
               ))}
             </div>
           </section>
         )}
       </div>
 
+      {/* MOBILE STICKY BOTTOM BAR */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#faf6ee] border-t-2 border-gold p-3 flex items-center justify-between gap-3 shadow-2xl">
+        <div>
+          <p className="text-[10px] text-bark-400 font-bold uppercase tracking-wider">மொத்தம் (Total)</p>
+          <p className="text-xl font-extrabold text-forest-700 font-catamaran leading-none">
+            ₹{(discountedPrice * qty).toLocaleString()}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAdd}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-none font-extrabold text-sm transition-all duration-200 cursor-pointer min-h-[44px] ${
+            added
+              ? "bg-forest-700 text-cream-100"
+              : "bg-gold text-bark-900 shadow-green active:scale-98"
+          }`}
+        >
+          {added ? (
+            <>
+              <CheckCircle size={16} /> சேர்க்கப்பட்டது!
+            </>
+          ) : (
+            <>
+              <ShoppingCart size={16} /> கூடையில் சேர்
+            </>
+          )}
+        </button>
+      </div>
+
       <Footer />
-    </div>
+
+      {/* Floating Call Button moved above sticky bottom bar on mobile */}
+      <FloatingCallButton hasStickyBottomBar={true} />
+    </PageTransition>
   );
 }

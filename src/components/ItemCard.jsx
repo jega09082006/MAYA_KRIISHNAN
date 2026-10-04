@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Eye } from "lucide-react";
+import { motion } from "framer-motion";
 import { useStore } from "../context/StoreContext";
-import { getEmojiGradient } from "../data/mockData";
 import OfferBadge from "./OfferBadge";
+import { getItemImage, EG_ICON } from "../utils/images";
 
 export default function ItemCard({ item, showAddToCart = true, showCategories = false }) {
   const { addToCart, getItemPrice, getItemOffer, publicCategories } = useStore();
@@ -16,78 +17,71 @@ export default function ItemCard({ item, showAddToCart = true, showCategories = 
   const itemCats = item.categoryIds || item.publicCategories || [];
   const cats = publicCategories.filter((c) => itemCats.includes(c.id));
 
-  const gradientClass = getEmojiGradient(item.emoji);
-
   function handleAdd(e) {
     e.preventDefault();
+    e.stopPropagation();
     addToCart(item);
     setAdded(true);
     setTimeout(() => setAdded(false), 1500);
   }
 
-  return (
-    <Link to={`/item/${item.id}`} className="group block h-full">
-      <div className="card overflow-hidden hover:shadow-card-hover hover:-translate-y-1 transition-all duration-300 h-full flex flex-col justify-between">
-        <div>
-          {/* Emoji Gradient Tile Header */}
-          <div
-            className={`relative overflow-hidden bg-gradient-to-br ${gradientClass} h-40 sm:h-44 flex items-center justify-center`}
-          >
-            <div className="absolute -right-6 -bottom-6 w-28 h-28 bg-white/20 rounded-full blur-sm pointer-events-none" />
-            <div className="absolute -left-6 -top-6 w-24 h-24 bg-white/15 rounded-full blur-sm pointer-events-none" />
+  const hasCustomImage = Boolean(item.image || item.imageUrl);
+  const imgSrc = getItemImage(item);
 
-            {(() => {
-              const photoUrl =
-                item.imageUrl ||
-                item.image ||
-                (item.emoji === "🌿" ? "/photos/herb.svg" :
-                 item.emoji === "🌶️" ? "/photos/spice.svg" :
-                 item.emoji === "🌾" ? "/photos/grocery.svg" :
-                 item.emoji === "🪔" ? "/photos/pooja.svg" :
-                 item.emoji === "🧴" ? "/photos/oil.svg" :
-                 item.emoji === "💊" ? "/photos/medicine.svg" :
-                 "/photos/grocery.svg");
-              return (
-                <img
-                  src={photoUrl}
-                  alt={item.tamilName || item.englishName}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              );
-            })()}
+  return (
+    <div className="group block h-full min-w-0">
+      <motion.div
+        whileHover={{ y: -3 }}
+        transition={{ duration: 0.2, ease: "easeInOut" }}
+        className="bg-[#faf6ee] rounded-none shadow-green hover:shadow-green-hover border border-bark-200 transition-all duration-200 h-full flex flex-col justify-between box-border overflow-hidden"
+      >
+        <div>
+          {/* Product Card Image Area: Square (1/1), bg-[#faf6ee], border-b border-bark-200, rounded-none */}
+          <Link to={`/item/${item.id}`} className="block relative overflow-hidden bg-[#faf6ee] aspect-square flex items-center justify-center border-b border-bark-200 rounded-none">
+            <img
+              src={imgSrc}
+              alt={item.tamilName || item.englishName}
+              loading="lazy"
+              decoding="async"
+              onError={(e) => {
+                e.currentTarget.src = EG_ICON;
+              }}
+              className={`w-full h-full ${
+                hasCustomImage ? "object-cover" : "object-contain p-2"
+              } transition-transform duration-300 group-hover:scale-105`}
+            />
 
             {/* Offer badge overlay */}
             {hasOffer && (
-              <div className="absolute top-2.5 left-2.5">
+              <div className="absolute top-2 left-2 z-10">
                 <OfferBadge offer={offer} originalPrice={item.price} />
               </div>
             )}
 
             {/* Unit pill */}
             {item.unit && (
-              <div className="absolute bottom-2.5 right-2.5 bg-black/40 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
+              <div className="absolute bottom-2 right-2 bg-forest-700/90 text-cream-100 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full font-lato">
                 {item.unit}
               </div>
             )}
 
-            {/* Quick view overlay */}
-            <div className="absolute inset-0 bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-              <span className="bg-white/95 text-gray-800 font-semibold text-xs px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-md backdrop-blur-sm">
-                <Eye size={13} /> விவரம்
+            {/* Quick view overlay — visible ONLY on devices with hover capability */}
+            <div className="hidden @media(hover:hover):flex absolute inset-0 bg-forest-900/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 items-center justify-center">
+              <span className="bg-cream-100 text-forest-700 font-bold text-xs px-3.5 py-1.5 rounded-none flex items-center gap-1.5 shadow-md">
+                <Eye size={13} /> விவரம் (View)
               </span>
             </div>
-          </div>
+          </Link>
 
           {/* Content */}
-          <div className="p-3.5 sm:p-4">
-            {/* Optional category tags (hidden on home) */}
+          <div className="p-2.5 sm:p-4">
+            {/* Optional category tags */}
             {showCategories && cats.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-2">
+              <div className="flex flex-wrap gap-1 mb-1.5">
                 {cats.map((c) => (
                   <span
                     key={c.id}
-                    className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
-                    style={{ backgroundColor: c.color + "18", color: c.color }}
+                    className="text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-full bg-forest-100 text-forest-800 truncate"
                   >
                     {c.shortLabel || c.label}
                   </span>
@@ -95,26 +89,30 @@ export default function ItemCard({ item, showAddToCart = true, showCategories = 
               </div>
             )}
 
-            {/* Tamil Name & English Name (Equal Size) */}
-            <h3 className="font-extrabold text-gray-900 text-sm sm:text-base leading-snug group-hover:text-brand-orange transition-colors">
-              {item.tamilName}
-            </h3>
-            <p className="text-sm sm:text-base font-semibold text-gray-700 leading-snug mb-2.5 mt-0.5">
+            {/* Tamil Name (16-17px, bold, max 2 lines) */}
+            <Link to={`/item/${item.id}`} className="block">
+              <h3 className="font-extrabold text-bark-900 text-base sm:text-lg font-tamil leading-tight line-clamp-2 hover:text-forest transition-colors">
+                {item.tamilName}
+              </h3>
+            </Link>
+
+            {/* English Name (12-13px, muted, 1 line) */}
+            <p className="text-xs sm:text-sm font-normal text-bark-400 font-lato truncate mb-2 mt-0.5">
               {item.englishName}
             </p>
 
-            {/* Price & Unit */}
-            <div className="flex items-baseline gap-1.5 mb-2">
-              <span className="font-extrabold text-base sm:text-lg text-gray-900">
+            {/* Price & Offer */}
+            <div className="flex items-baseline gap-1.5 mb-2 flex-wrap font-catamaran">
+              <span className="font-extrabold text-base sm:text-lg text-forest-700">
                 ₹{discountedPrice.toLocaleString()}
               </span>
               {hasOffer && (
-                <span className="text-gray-400 line-through text-xs font-semibold">
+                <span className="text-bark-400 line-through text-xs font-semibold font-lato">
                   ₹{item.price.toLocaleString()}
                 </span>
               )}
               {item.unit && (
-                <span className="text-xs text-gray-400 font-medium">
+                <span className="text-xs text-bark-400 font-normal font-lato">
                   / {item.unit}
                 </span>
               )}
@@ -122,33 +120,37 @@ export default function ItemCard({ item, showAddToCart = true, showCategories = 
           </div>
         </div>
 
-        {/* Stock & Add to Cart button */}
-        <div className="px-3.5 sm:px-4 pb-3.5 sm:pb-4 pt-0">
-          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-            <span
-              className={`text-[11px] font-semibold ${
-                item.stock > 10 ? "text-emerald-600" : "text-amber-600"
-              }`}
-            >
-              {item.stock > 10 ? `இருப்பு: ${item.stock}` : `இருப்பு: ${item.stock}!`}
-            </span>
-
+        {/* Stock & Add to Cart button pinned to bottom */}
+        <div className="px-2.5 sm:px-4 pb-2.5 sm:pb-4 pt-0">
+          <div className="space-y-1.5 pt-1.5 border-t border-bark-200">
             {showAddToCart && (
               <button
+                type="button"
                 onClick={handleAdd}
-                className={`flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-xl transition-all duration-200 cursor-pointer ${
+                className={`w-full flex items-center justify-center gap-1.5 text-xs sm:text-sm font-extrabold py-2.5 px-3 rounded-none transition-all duration-200 cursor-pointer min-h-[44px] ${
                   added
-                    ? "bg-emerald-600 text-white scale-95"
-                    : "bg-gradient-to-r from-brand-orange to-brand-pink text-white hover:scale-105 hover:shadow-md"
+                    ? "bg-forest-600 text-cream-100 shadow-sm"
+                    : "bg-gold text-bark-900 hover:bg-gold-600 shadow-green active:scale-98"
                 }`}
               >
-                <ShoppingCart size={13} />
-                {added ? "சேர்க்கப்பட்டது" : "சேர்"}
+                <ShoppingCart size={15} />
+                {added ? "சேர்க்கப்பட்டது" : "சேர் / Add"}
               </button>
+            )}
+
+            {/* Stock text: small, shown when low or out */}
+            {item.stock <= 10 && (
+              <p
+                className={`text-[10px] sm:text-xs font-bold text-center ${
+                  item.stock <= 0 ? "text-danger font-extrabold" : "text-amber-700"
+                }`}
+              >
+                {item.stock <= 0 ? "இருப்பு இல்லை (Out of stock)" : `இருப்பு: ${item.stock} மட்டுமே!`}
+              </p>
             )}
           </div>
         </div>
-      </div>
-    </Link>
+      </motion.div>
+    </div>
   );
 }

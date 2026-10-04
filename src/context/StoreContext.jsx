@@ -275,7 +275,7 @@ export function StoreProvider({ children }) {
       id: `sug-${Date.now()}`,
       name: name.trim(),
       tamilName: tamilName?.trim() || name.trim(),
-      color: color || "#FF7A00",
+      color: color || "#2d5a3d",
       isActive: true,
       order: maxOrder + 1,
       itemIds: [],
