@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Edit2, Trash2, Check, X, Star, ArrowRight, Tag, ToggleLeft, ToggleRight, RotateCcw } from "lucide-react";
+import { Plus, Edit2, Trash2, Check, X, Star, ArrowRight, Tag, ToggleLeft, ToggleRight } from "lucide-react";
 import { useStore } from "../../context/StoreContext";
 import { GoldLotusOrnament } from "../../components/GoldLotusOrnament";
 import { getCategoryImage, EG_ICON } from "../../utils/images";
@@ -44,13 +44,16 @@ export default function AdminCategoriesPage() {
   return (
     <div className="space-y-6 text-gray-800 font-lato">
       <div className="border-b border-gray-200 pb-4">
-        <div className="flex items-center gap-2">
-          <GoldLotusOrnament size={22} />
+        <div className="flex items-baseline flex-wrap gap-2">
+          <GoldLotusOrnament size={22} className="self-center shrink-0" />
           <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-gray-900">
-            Categories & Suggestion Groups <span className="font-tamil font-extrabold text-xl text-forest-700 ml-2">(பிரிவுகள்)</span>
+            Categories & Suggestion Groups
           </h1>
+          <span className="font-catamaran font-bold text-lg text-forest-700">
+            (பிரிவுகள்)
+          </span>
         </div>
-        <p className="text-gray-500 text-sm font-lato mt-0.5">
+        <p className="text-gray-500 text-sm font-lato mt-1">
           பொதுப் பிரிவுகள் மற்றும் முகப்பு பரிந்துரை குழுக்களை நிர்வகிக்கவும்
         </p>
       </div>
@@ -59,18 +62,18 @@ export default function AdminCategoriesPage() {
         {/* PUBLIC Categories */}
         <div className="bg-white border border-gray-200 rounded-none p-6 space-y-5 shadow-green">
           <div className="flex items-center gap-2 border-b border-gray-200 pb-3">
-            <div className="w-8 h-8 rounded-none bg-forest-700 flex items-center justify-center text-gold">
+            <div className="w-8 h-8 rounded-none bg-forest-700 flex items-center justify-center text-gold shrink-0">
               <Tag size={16} />
             </div>
-            <div>
-              <h2 className="font-bold text-gray-900 font-tamil text-base">பொதுப் பிரிவுகள் (Public Categories)</h2>
-              <p className="text-xs text-gray-500 font-lato">வாடிக்கையாளர் வடிகட்டும் சில்லுகளில் தெரியும் ({publicCategories.length} Public Categories)</p>
+            <div className="min-w-0">
+              <h2 className="font-bold text-gray-900 font-catamaran text-base">பொதுப் பிரிவுகள்</h2>
+              <p className="text-xs text-gray-500 font-lato">Public Categories ({publicCategories.length})</p>
             </div>
           </div>
 
           {/* Add new category form */}
           <div className="space-y-2.5 p-3 bg-gray-50 border border-gray-200">
-            <p className="text-xs font-bold text-gray-700 font-tamil">புதிய பிரிவு சேர் (Add Category)</p>
+            <p className="text-xs font-bold text-gray-700 font-catamaran">புதிய பிரிவு சேர் (Add Category)</p>
             <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
@@ -103,8 +106,7 @@ export default function AdminCategoriesPage() {
                 (i.categoryIds || i.publicCategories || []).includes(cat.id)
               ).length;
 
-              const catImg = getCategoryIcon ? getCategoryIcon(cat) : getCategoryImage(cat);
-              const hasCustomImg = Boolean(cat.image || cat.imageUrl);
+              const catImg = getCategoryImage(cat);
 
               return (
                 <div
@@ -124,7 +126,7 @@ export default function AdminCategoriesPage() {
                   </div>
 
                   {editingId === cat.id ? (
-                    <div className="flex-1 space-y-1.5">
+                    <div className="flex-1 space-y-1.5 min-w-0">
                       <input
                         value={editLabel}
                         onChange={(e) => setEditLabel(e.target.value)}
@@ -140,7 +142,7 @@ export default function AdminCategoriesPage() {
                     </div>
                   ) : (
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-extrabold text-gray-900 text-sm font-tamil truncate">
+                      <h4 className="font-extrabold text-gray-900 text-sm font-catamaran min-w-0 [overflow-wrap:anywhere] leading-snug">
                         {cat.label}
                       </h4>
                       <p className="text-xs text-gray-500 font-lato mt-0.5">
@@ -192,19 +194,19 @@ export default function AdminCategoriesPage() {
 
         {/* Suggestion Groups List */}
         <div className="bg-white border border-gray-200 rounded-none p-6 space-y-5 shadow-green">
-          <div className="flex items-center justify-between border-b border-gray-200 pb-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-none bg-gold text-bark-900 flex items-center justify-center">
+          <div className="flex items-center justify-between border-b border-gray-200 pb-3 flex-wrap gap-2">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-8 h-8 rounded-none bg-gold text-bark-900 flex items-center justify-center shrink-0">
                 <Star size={16} />
               </div>
-              <div>
-                <h2 className="font-bold text-gray-900 font-tamil text-base">பரிந்துரை குழுக்கள் (Suggestion Groups)</h2>
-                <p className="text-xs text-gray-500 font-lato">முகப்புப் பக்கத்தில் தனித்தனி பிரிவுகளாகத் தெரியும்</p>
+              <div className="min-w-0">
+                <h2 className="font-bold text-gray-900 font-catamaran text-base">பரிந்துரை குழுக்கள்</h2>
+                <p className="text-xs text-gray-500 font-lato">Suggestion Groups</p>
               </div>
             </div>
             <Link
               to="/admin/suggestions"
-              className="text-xs font-bold text-forest-700 hover:text-gold flex items-center gap-1 transition-colors font-lato"
+              className="text-xs font-bold text-forest-700 hover:text-gold flex items-center gap-1 transition-colors font-lato whitespace-nowrap shrink-0 min-h-[44px] px-1"
             >
               Manage Groups <ArrowRight size={13} />
             </Link>
@@ -222,10 +224,10 @@ export default function AdminCategoriesPage() {
                     style={{ backgroundColor: group.color }}
                   />
                   <div className="min-w-0">
-                    <p className="font-extrabold text-sm text-gray-900 font-tamil truncate">
+                    <p className="font-extrabold text-sm text-gray-900 font-catamaran min-w-0 [overflow-wrap:anywhere] leading-snug">
                       {group.tamilName}
                     </p>
-                    <p className="text-xs text-gray-500 font-lato truncate">
+                    <p className="text-xs text-gray-500 font-lato min-w-0 [overflow-wrap:anywhere] leading-snug">
                       {group.name} · {group.itemIds?.length || 0} பொருட்கள்
                     </p>
                   </div>

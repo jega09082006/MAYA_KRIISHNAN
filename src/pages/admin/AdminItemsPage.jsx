@@ -30,15 +30,23 @@ export default function AdminItemsPage() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4 border-b border-gray-200 pb-4">
         <div>
-          <div className="flex items-center gap-2">
-            <GoldLotusOrnament size={22} />
+          <div className="flex items-baseline flex-wrap gap-2">
+            <GoldLotusOrnament size={22} className="self-center shrink-0" />
             <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-gray-900">
-              Items Management <span className="font-tamil font-extrabold text-xl text-forest-700 ml-2">(பொருட்கள் மேலாண்மை)</span>
+              Items Management
             </h1>
+            <span className="font-catamaran font-bold text-lg text-forest-700">
+              (பொருட்கள் மேலாண்மை)
+            </span>
           </div>
-          <p className="text-gray-500 text-sm font-lato mt-0.5">{items.length} பொருட்கள் கடையில் உள்ளன ({items.length} products in store)</p>
+          <p className="text-gray-500 text-sm font-lato mt-1">
+            {items.length} பொருட்கள் கடையில் உள்ளன ({items.length} products in store)
+          </p>
         </div>
-        <Link to="/admin/items/new" className="bg-forest text-cream-100 font-bold px-4 py-2.5 rounded-none hover:bg-forest-700 transition-all flex items-center gap-2 shadow-green text-sm">
+        <Link
+          to="/admin/items/new"
+          className="bg-forest text-cream-100 font-bold px-4 py-2.5 rounded-none hover:bg-forest-700 transition-all flex items-center gap-2 shadow-green text-sm shrink-0"
+        >
           <Plus size={16} /> புதிய பொருள் சேர் (Add Item)
         </Link>
       </div>
@@ -87,15 +95,15 @@ export default function AdminItemsPage() {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-extrabold text-gray-900 font-tamil text-base leading-snug break-words">
+                      <p className="font-extrabold text-gray-900 font-catamaran text-base leading-snug min-w-0 [overflow-wrap:anywhere]">
                         {item.tamilName}
                       </p>
-                      <p className="text-xs text-gray-500 font-lato truncate">
+                      <p className="text-xs text-gray-500 font-lato leading-snug min-w-0 [overflow-wrap:anywhere]">
                         {item.englishName}
                       </p>
-                      <div className="flex items-center gap-2 mt-1">
+                      <div className="flex flex-wrap items-center gap-2 mt-1">
                         <span className="font-extrabold text-forest-700 font-catamaran text-sm">
-                          ₹{item.price.toLocaleString()} {item.unit ? `(${item.unit})` : ""}
+                          ₹{item.price.toLocaleString("en-IN")} {item.unit ? `(${item.unit})` : ""}
                         </span>
                         <span
                           className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
@@ -185,10 +193,10 @@ export default function AdminItemsPage() {
                             />
                           </div>
                           <div className="min-w-0">
-                            <p className="font-extrabold text-gray-900 font-tamil truncate max-w-[180px]">
+                            <p className="font-extrabold text-gray-900 font-catamaran min-w-0 [overflow-wrap:anywhere] leading-snug">
                               {item.tamilName}
                             </p>
-                            <p className="text-xs text-gray-500 font-lato truncate max-w-[180px]">
+                            <p className="text-xs text-gray-500 font-lato min-w-0 [overflow-wrap:anywhere] leading-snug">
                               {item.englishName}
                             </p>
                           </div>
@@ -235,7 +243,7 @@ export default function AdminItemsPage() {
                       {/* Price & Unit */}
                       <td className="px-5 py-3.5 font-catamaran">
                         <span className="font-extrabold text-gray-900 block">
-                          ₹{item.price.toLocaleString()}
+                          ₹{item.price.toLocaleString("en-IN")}
                         </span>
                         {item.unit && (
                           <span className="text-xs text-gray-500 font-lato">
@@ -298,7 +306,7 @@ export default function AdminItemsPage() {
           <div className="text-5xl">🗑️</div>
           <p className="text-gray-800 font-medium">
             இந்த பொருளை நீக்க விரும்புகிறீர்களா? <br />
-            <strong className="text-gray-900 font-bold font-tamil">{deleteTarget?.tamilName} ({deleteTarget?.englishName})</strong>
+            <strong className="text-gray-900 font-bold font-catamaran">{deleteTarget?.tamilName} ({deleteTarget?.englishName})</strong>
           </p>
           <p className="text-xs text-gray-500">இந்த செயலை மாற்ற முடியாது.</p>
           <div className="flex gap-3 justify-center mt-4">

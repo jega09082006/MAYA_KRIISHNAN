@@ -55,7 +55,7 @@ export default function AdminCustomerDetailPage() {
       <div className="flex items-center justify-center h-full font-lato">
         <div className="text-center bg-white border border-gray-200 p-8 shadow-green rounded-none">
           <p className="text-gray-500 font-bold">Customer not found</p>
-          <button onClick={() => navigate("/admin/customers")} className="bg-forest text-cream-100 font-bold px-4 py-2 rounded-none hover:bg-forest-700 mt-4 text-xs">
+          <button onClick={() => navigate("/admin/customers")} className="bg-forest text-cream-100 font-bold px-4 py-2 rounded-none hover:bg-forest-700 mt-4 text-xs min-h-[44px]">
             Back to Customers
           </button>
         </div>
@@ -124,15 +124,18 @@ export default function AdminCustomerDetailPage() {
       <div className="flex items-center gap-4 border-b border-gray-200 pb-4">
         <button
           onClick={() => navigate("/admin/customers")}
-          className="p-2 rounded-none hover:bg-gray-200 transition-colors text-gray-600 cursor-pointer border border-gray-300"
+          className="p-2 rounded-none hover:bg-gray-200 transition-colors text-gray-600 cursor-pointer border border-gray-300 min-h-[44px] min-w-[44px] flex items-center justify-center"
         >
           <ArrowLeft size={18} />
         </button>
-        <div className="flex items-center gap-2">
-          <GoldLotusOrnament size={22} />
+        <div className="flex items-baseline flex-wrap gap-2">
+          <GoldLotusOrnament size={22} className="self-center shrink-0" />
           <h1 className="text-2xl font-bold font-playfair text-gray-900">
-            Customer Details <span className="font-tamil font-extrabold text-xl text-forest-700 ml-2">(வாடிக்கையாளர் விவரம்)</span>
+            Customer Details
           </h1>
+          <span className="font-catamaran font-bold text-lg text-forest-700">
+            (வாடிக்கையாளர் விவரம்)
+          </span>
         </div>
       </div>
 
@@ -142,14 +145,14 @@ export default function AdminCustomerDetailPage() {
           <img
             src={customer.avatar}
             alt={customer.name}
-            className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200"
+            className="w-20 h-20 rounded-full bg-gray-100 border border-gray-200 shrink-0"
             onError={(e) => {
               e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(customer.name)}&background=2d5a3d&color=fff&size=80`;
             }}
           />
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-3 mb-1">
-              <h2 className="text-xl font-bold text-gray-900 font-lato">{customer.name}</h2>
+              <h2 className="text-xl font-bold text-gray-900 font-lato min-w-0 [overflow-wrap:anywhere]">{customer.name}</h2>
               <span
                 className={`text-xs font-bold px-2.5 py-0.5 rounded-full ${
                   customer.status === "active"
@@ -160,13 +163,13 @@ export default function AdminCustomerDetailPage() {
                 {customer.status}
               </span>
             </div>
-            <p className="text-gray-600 text-sm font-medium font-lato">{customer.email}</p>
-            <p className="text-gray-500 text-xs mt-0.5 font-lato">{customer.phone} · {customer.address}</p>
+            <p className="text-gray-600 text-sm font-medium font-lato min-w-0 [overflow-wrap:anywhere]">{customer.email}</p>
+            <p className="text-gray-500 text-xs mt-0.5 font-lato min-w-0 [overflow-wrap:anywhere]">{customer.phone} · {customer.address}</p>
           </div>
           <div className="flex gap-4 text-center">
             {[
               { label: "ஆர்டர்கள்", value: customer.totalOrders, color: "text-forest-700" },
-              { label: "வாங்கியது", value: `₹${customer.totalSpent.toLocaleString()}`, color: "text-gold-700" },
+              { label: "வாங்கியது", value: `₹${customer.totalSpent.toLocaleString("en-IN")}`, color: "text-gold-700" },
             ].map((s) => (
               <div key={s.label} className="bg-gray-50 border border-gray-200 rounded-none px-5 py-3">
                 <p className={`text-xl font-extrabold font-catamaran ${s.color}`}>{s.value}</p>
@@ -181,8 +184,8 @@ export default function AdminCustomerDetailPage() {
         {/* Order History */}
         <div className="bg-white border border-gray-200 rounded-none p-6 shadow-green">
           <div className="flex items-center gap-2 mb-4 border-b border-gray-200 pb-3">
-            <ShoppingBag size={18} className="text-forest-700" />
-            <h3 className="font-bold text-gray-900 font-tamil text-base">ஆர்டர் வரலாறு (Order History)</h3>
+            <ShoppingBag size={18} className="text-forest-700 shrink-0" />
+            <h3 className="font-bold text-gray-900 font-catamaran text-base">ஆர்டர் வரலாறு (Order History)</h3>
           </div>
           {customerOrders.length === 0 ? (
             <p className="text-sm text-gray-400 text-center py-8 font-lato">No orders yet</p>
@@ -190,13 +193,13 @@ export default function AdminCustomerDetailPage() {
             <div className="space-y-3">
               {customerOrders.map((order) => (
                 <div key={order.id} className="border border-gray-200 rounded-none p-4 hover:border-forest-400 transition-colors bg-white">
-                  <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center justify-between mb-2 flex-wrap gap-2">
                     <div>
                       <p className="font-bold text-gray-900 text-sm font-mono">{order.id}</p>
                       <p className="text-xs text-gray-400 font-lato">{new Date(order.date).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}</p>
                     </div>
                     <div className="text-right">
-                      <p className="font-extrabold text-gray-900 font-catamaran">₹{order.total.toLocaleString()}</p>
+                      <p className="font-extrabold text-gray-900 font-catamaran">₹{order.total.toLocaleString("en-IN")}</p>
                       <span className={`text-xs font-bold px-2 py-0.5 rounded-full capitalize font-lato ${orderStatusColors[order.status] || "bg-gray-100 text-gray-500"}`}>
                         {order.status}
                       </span>
@@ -218,7 +221,7 @@ export default function AdminCustomerDetailPage() {
                             }}
                             className={`w-4 h-4 ${hasCustomImage ? "object-cover" : "object-contain"} flex-shrink-0`}
                           />
-                          <span className="text-xs text-gray-800 font-bold font-tamil truncate max-w-[120px]">
+                          <span className="text-xs text-gray-800 font-bold font-catamaran min-w-0 [overflow-wrap:anywhere]">
                             {itm.tamilName || itm.englishName}
                           </span>
                         </div>
@@ -233,12 +236,12 @@ export default function AdminCustomerDetailPage() {
 
         {/* Offers */}
         <div className="bg-white border border-gray-200 rounded-none p-6 shadow-green">
-          <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-3">
+          <div className="flex items-center justify-between mb-4 border-b border-gray-200 pb-3 flex-wrap gap-2">
             <div className="flex items-center gap-2">
-              <Gift size={18} className="text-gold-600" />
-              <h3 className="font-bold text-gray-900 font-tamil text-base">தனிப்பயன் சலுகைகள் (Offers)</h3>
+              <Gift size={18} className="text-gold-600 shrink-0" />
+              <h3 className="font-bold text-gray-900 font-catamaran text-base">தனிப்பயன் சலுகைகள் (Offers)</h3>
             </div>
-            <button onClick={openAddModal} className="bg-forest text-cream-100 font-bold px-3 py-1.5 rounded-none hover:bg-forest-700 text-xs flex items-center gap-1.5 cursor-pointer shadow-green">
+            <button onClick={openAddModal} className="bg-forest text-cream-100 font-bold px-3 py-1.5 rounded-none hover:bg-forest-700 text-xs flex items-center gap-1.5 cursor-pointer shadow-green min-h-[44px]">
               <Plus size={14} /> புதிய சலுகை
             </button>
           </div>
@@ -247,7 +250,7 @@ export default function AdminCustomerDetailPage() {
             <div className="text-center py-8 text-gray-400 font-lato">
               <Gift size={36} className="mx-auto mb-3 opacity-20" />
               <p className="text-sm">இந்த வாடிக்கையாளருக்கு சலுகைகள் எதுவும் இல்லை.</p>
-              <button onClick={openAddModal} className="mt-3 text-xs text-forest-700 hover:text-gold font-bold transition-colors cursor-pointer">
+              <button onClick={openAddModal} className="mt-3 text-xs text-forest-700 hover:text-gold font-bold transition-colors cursor-pointer min-h-[44px]">
                 + Create first offer
               </button>
             </div>
@@ -264,32 +267,32 @@ export default function AdminCustomerDetailPage() {
                     <div className="flex items-start justify-between gap-3 mb-2">
                       <div className="flex items-center gap-2 flex-wrap">
                         <OfferBadge offer={offer} />
-                        <span className="font-bold text-gray-900 text-sm font-lato">{offer.name}</span>
+                        <span className="font-bold text-gray-900 text-sm font-lato min-w-0 [overflow-wrap:anywhere]">{offer.name}</span>
                       </div>
                       <div className="flex gap-1 flex-shrink-0">
-                        <button onClick={() => updateOffer(offer.id, { isActive: !offer.isActive })} className={`p-1.5 rounded-none transition-colors cursor-pointer ${offer.isActive ? "text-forest-700 hover:bg-forest-100" : "text-gray-400 hover:bg-gray-100"}`}>
-                          {offer.isActive ? <ToggleRight size={16} /> : <ToggleLeft size={16} />}
+                        <button onClick={() => updateOffer(offer.id, { isActive: !offer.isActive })} className={`p-1.5 rounded-none transition-colors cursor-pointer min-h-[44px] min-w-[36px] flex items-center justify-center ${offer.isActive ? "text-forest-700 hover:bg-forest-100" : "text-gray-400 hover:bg-gray-100"}`}>
+                          {offer.isActive ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
                         </button>
-                        <button onClick={() => openEditModal(offer)} className="p-1.5 rounded-none text-forest-700 hover:bg-forest-100 transition-colors cursor-pointer">
-                          <Edit2 size={14} />
+                        <button onClick={() => openEditModal(offer)} className="p-1.5 rounded-none text-forest-700 hover:bg-forest-100 transition-colors cursor-pointer min-h-[44px] min-w-[36px] flex items-center justify-center">
+                          <Edit2 size={15} />
                         </button>
-                        <button onClick={() => deleteOffer(offer.id)} className="p-1.5 rounded-none text-danger hover:bg-red-50 transition-colors cursor-pointer">
-                          <Trash2 size={14} />
+                        <button onClick={() => deleteOffer(offer.id)} className="p-1.5 rounded-none text-danger hover:bg-red-50 transition-colors cursor-pointer min-h-[44px] min-w-[36px] flex items-center justify-center">
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </div>
 
                     <div className="text-xs text-gray-500 space-y-0.5 font-lato">
                       {offer.type === "item" && offerItem && (
-                        <div className="flex items-center gap-1.5 font-medium">
-                          <Package size={12} />
-                          <span>{offerItem.tamilName} ({offerItem.englishName})</span>
+                        <div className="flex items-center gap-1.5 font-medium flex-wrap">
+                          <Package size={12} className="shrink-0" />
+                          <span className="min-w-0 [overflow-wrap:anywhere]">{offerItem.tamilName} ({offerItem.englishName})</span>
                           <span>·</span>
                           <span className="text-forest-700 font-bold">{offer.discountType === "percent" ? `${offer.discountValue}% off` : `₹${offer.discountValue} off`}</span>
                         </div>
                       )}
                       {offer.type === "combo" && (
-                        <div>
+                        <div className="min-w-0 [overflow-wrap:anywhere]">
                           <span className="font-bold">காம்போ: </span>
                           {comboItems.map((i) => i.tamilName || i.englishName).join(" + ")}
                           {offer.comboPrice ? ` · சிறப்பு விலை: ₹${offer.comboPrice}` : ""}
@@ -324,7 +327,7 @@ export default function AdminCustomerDetailPage() {
                   key={t}
                   type="button"
                   onClick={() => setForm({ ...form, type: t })}
-                  className={`flex-1 py-2.5 rounded-none text-xs font-bold capitalize border transition-all cursor-pointer ${
+                  className={`flex-1 py-2.5 rounded-none text-xs font-bold capitalize border transition-all cursor-pointer min-h-[44px] ${
                     form.type === t
                       ? "bg-forest text-cream-100 border-forest shadow-sm"
                       : "border-gray-300 text-gray-700 hover:border-forest-400 bg-white"
@@ -361,7 +364,7 @@ export default function AdminCustomerDetailPage() {
                   <option value="">— பொருளைத் தேர்ந்தெடுக்கவும் —</option>
                   {items.map((i) => (
                     <option key={i.id} value={i.id}>
-                      {i.tamilName} ({i.englishName}) - ₹{i.price.toLocaleString()}
+                      {i.tamilName} ({i.englishName}) - ₹{i.price.toLocaleString("en-IN")}
                     </option>
                   ))}
                 </select>
@@ -398,16 +401,16 @@ export default function AdminCustomerDetailPage() {
             <>
               <div>
                 <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">பொருட்களைத் தேர்வு செய்க (குறைந்தது 2)</label>
-                <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto border border-gray-200 rounded-none p-3 bg-gray-50">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-52 overflow-y-auto border border-gray-200 rounded-none p-3 bg-gray-50">
                   {items.map((i) => (
                     <label key={i.id} className="flex items-center gap-2 p-2 rounded-none hover:bg-gray-100 cursor-pointer">
                       <input
                         type="checkbox"
                         checked={form.itemIds.includes(i.id)}
                         onChange={() => toggleComboItem(i.id)}
-                        className="accent-[#2d5a3d] w-4 h-4 cursor-pointer"
+                        className="accent-[#2d5a3d] w-4 h-4 cursor-pointer shrink-0"
                       />
-                      <span className="text-xs font-bold text-gray-800 truncate font-tamil">
+                      <span className="text-xs font-bold text-gray-800 font-catamaran min-w-0 [overflow-wrap:anywhere]">
                         {i.tamilName} ({i.englishName})
                       </span>
                     </label>
@@ -454,11 +457,11 @@ export default function AdminCustomerDetailPage() {
             <button
               type="button"
               onClick={() => setModalOpen(false)}
-              className="bg-white text-gray-700 border border-gray-300 font-bold py-2.5 flex-1 rounded-none hover:bg-gray-100 text-xs cursor-pointer"
+              className="bg-white text-gray-700 border border-gray-300 font-bold py-2.5 flex-1 rounded-none hover:bg-gray-100 text-xs cursor-pointer min-h-[44px]"
             >
               Cancel
             </button>
-            <button onClick={handleSave} className="bg-forest text-cream-100 font-bold py-2.5 flex-1 rounded-none hover:bg-forest-700 text-xs cursor-pointer border-0 shadow-green">
+            <button onClick={handleSave} className="bg-forest text-cream-100 font-bold py-2.5 flex-1 rounded-none hover:bg-forest-700 text-xs cursor-pointer border-0 shadow-green min-h-[44px]">
               {editOffer ? "Update Offer" : "Create Offer"}
             </button>
           </div>

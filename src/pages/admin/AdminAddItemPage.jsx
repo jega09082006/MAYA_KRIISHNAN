@@ -148,15 +148,21 @@ export default function AdminAddItemPage() {
       <div className="flex items-center gap-4 border-b border-gray-200 pb-4">
         <button
           onClick={() => navigate("/admin/items")}
-          className="p-2 rounded-none hover:bg-gray-200 transition-colors text-gray-600 cursor-pointer border border-gray-300"
+          className="p-2 rounded-none hover:bg-gray-200 transition-colors text-gray-600 cursor-pointer border border-gray-300 min-h-[44px] min-w-[44px] flex items-center justify-center"
         >
           <ArrowLeft size={18} />
         </button>
         <div>
-          <h1 className="text-2xl font-bold font-playfair text-gray-900">
-            {isEdit ? "பொருளை மாற்று (Edit Item)" : "புதிய பொருள் சேர் (Add New Item)"}
-          </h1>
-          <p className="text-gray-500 text-sm font-lato">
+          <div className="flex items-baseline flex-wrap gap-2">
+            <GoldLotusOrnament size={22} className="self-center shrink-0" />
+            <h1 className="text-2xl font-bold font-playfair text-gray-900">
+              {isEdit ? "Edit Item" : "Add New Item"}
+            </h1>
+            <span className="font-catamaran font-bold text-lg text-forest-700">
+              ({isEdit ? "பொருளை மாற்று" : "புதிய பொருள் சேர்"})
+            </span>
+          </div>
+          <p className="text-gray-500 text-sm font-lato mt-1">
             {isEdit ? "Update item information and photo" : "Add provisions or country medicine item"}
           </p>
         </div>
@@ -167,7 +173,7 @@ export default function AdminAddItemPage() {
         <form onSubmit={handleSubmit} className="xl:col-span-2 space-y-6">
           {/* Basic Details */}
           <div className="bg-white border border-gray-200 rounded-none p-6 space-y-5 shadow-green">
-            <h3 className="font-bold text-gray-900 flex items-center gap-2 font-tamil text-base border-b border-gray-200 pb-3">
+            <h3 className="font-bold text-gray-900 flex items-center gap-2 font-catamaran text-base border-b border-gray-200 pb-3">
               <GoldLotusOrnament size={18} /> பொருள் விவரங்கள் (Product Details)
             </h3>
 
@@ -348,8 +354,8 @@ export default function AdminAddItemPage() {
           <div className="bg-white border border-gray-200 rounded-none p-6 space-y-6 shadow-green">
             {/* PUBLIC categories with 24px round thumbnail */}
             <div>
-              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2 font-tamil text-base">
-                <Tag size={16} className="text-forest-700" /> பொதுப் பிரிவுகள் (PUBLIC Categories)
+              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2 font-catamaran text-base">
+                <Tag size={16} className="text-forest-700 shrink-0" /> பொதுப் பிரிவுகள் (PUBLIC Categories)
               </h3>
               <p className="text-xs text-gray-500 mb-3 font-lato">Multi-select: one item can belong to multiple categories</p>
               <div className="flex flex-wrap gap-2">
@@ -361,7 +367,7 @@ export default function AdminAddItemPage() {
                       key={cat.id}
                       type="button"
                       onClick={() => toggleCategory(cat.id)}
-                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer ${
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer min-h-[44px] ${
                         active
                           ? "bg-forest text-cream-100 border-forest shadow-sm"
                           : "bg-gray-50 border-gray-300 text-gray-700 hover:border-forest-400"
@@ -386,8 +392,8 @@ export default function AdminAddItemPage() {
 
             {/* Suggestion Groups Multi-Select */}
             <div className="border-t border-gray-200 pt-5">
-              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2 font-tamil text-base">
-                <Star size={16} className="text-gold-600" /> பரிந்துரை குழுக்கள் (Suggestion Groups)
+              <h3 className="font-bold text-gray-900 flex items-center gap-2 mb-2 font-catamaran text-base">
+                <Star size={16} className="text-gold-600 shrink-0" /> பரிந்துரை குழுக்கள் (Suggestion Groups)
               </h3>
               <p className="text-xs text-gray-500 mb-3 font-lato">
                 Select which home page featured sections should include this item
@@ -400,16 +406,16 @@ export default function AdminAddItemPage() {
                       key={group.id}
                       type="button"
                       onClick={() => toggleGroup(group.id)}
-                      className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer ${
+                      className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold border transition-all duration-200 cursor-pointer min-h-[44px] ${
                         active
                           ? "bg-gold text-bark-900 border-gold shadow-sm"
                           : "bg-gray-50 border-gray-300 text-gray-700 hover:border-gray-400"
                       }`}
                     >
                       <span
-                        className={`w-2 h-2 rounded-full ${active ? "bg-forest-700" : "bg-gray-400"}`}
+                        className={`w-2 h-2 rounded-full shrink-0 ${active ? "bg-forest-700" : "bg-gray-400"}`}
                       />
-                      {group.tamilName} ({group.name})
+                      <span className="min-w-0 [overflow-wrap:anywhere]">{group.tamilName} ({group.name})</span>
                     </button>
                   );
                 })}
@@ -420,7 +426,7 @@ export default function AdminAddItemPage() {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-forest text-cream-100 hover:bg-forest-700 font-extrabold py-3.5 text-base rounded-none shadow-green flex items-center justify-center gap-2 cursor-pointer transition-all font-lato"
+            className="w-full bg-forest text-cream-100 hover:bg-forest-700 font-extrabold py-3.5 text-base rounded-none shadow-green flex items-center justify-center gap-2 cursor-pointer transition-all font-lato min-h-[52px]"
           >
             <Save size={18} />
             {saved ? "சேமிக்கப்பட்டது! (Saved)..." : isEdit ? "பொருளை மாற்று (Update Item)" : "பொருளைச் சேர் (Add Item)"}
@@ -430,7 +436,7 @@ export default function AdminAddItemPage() {
         {/* Live Preview */}
         <div className="xl:col-span-1">
           <div className="sticky top-20">
-            <div className="bg-white border border-gray-200 rounded-none p-5 space-y-4 shadow-green">
+            <div className="bg-[#faf6ee] border border-gray-200 rounded-none p-5 space-y-4 shadow-green">
               <div className="flex items-center gap-2 text-forest-700 font-bold font-lato">
                 <Eye size={16} /> நேரலை முன்னோட்டம் (Live Preview)
               </div>

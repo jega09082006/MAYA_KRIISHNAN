@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Outlet, Navigate, useNavigate } from "react-router-dom";
 import AdminSidebar from "../../components/AdminSidebar";
-import { Bell, LogOut, Menu } from "lucide-react";
+import { LogOut, Menu } from "lucide-react";
 import { useStore } from "../../context/StoreContext";
+import { shopInfo } from "../../data/shopInfo";
 
 export default function AdminLayout() {
   const { currentUser, logout } = useStore();
@@ -29,47 +30,52 @@ export default function AdminLayout() {
       <div className="flex-1 flex flex-col min-w-0 max-w-full">
         {/* Top bar (Deep Forest Header) */}
         <header className="bg-[#1d3d29] text-cream-100 border-b border-gold/20 px-4 sm:px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
-          <div className="flex items-center gap-3">
-            {/* Hamburger Button for Mobile */}
+          {/* Left Area */}
+          <div className="flex items-center gap-3 min-w-0">
+            {/* Hamburger Button for Mobile (hidden on desktop lg) */}
             <button
               onClick={() => setMobileDrawerOpen(true)}
               aria-label="Open Admin Menu"
-              className="md:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-cream-100 hover:text-gold transition-colors cursor-pointer border border-gold/30 rounded-none bg-forest-600"
+              className="lg:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-cream-100 hover:text-gold transition-colors cursor-pointer border border-gold/30 rounded-none bg-forest-600 shrink-0"
             >
               <Menu size={20} />
             </button>
 
-            <div className="flex items-center gap-2">
+            {/* Mobile-only small logo + short title (Hidden on desktop lg because sidebar shows it) */}
+            <div className="flex lg:hidden items-center gap-2 min-w-0">
               <div className="w-7 h-7 rounded-full bg-forest-500 p-0.5 border border-gold/40 flex items-center justify-center shrink-0">
-                <img src="/photos/logo.png" alt="MAYA_KRISHNAN Logo" className="w-full h-full object-contain rounded-full" />
+                <img src="/photos/logo.png" alt={`${shopInfo.nameTamil} Logo`} className="w-full h-full object-contain rounded-full" />
               </div>
-              <span className="font-extrabold text-cream-100 text-xs sm:text-sm font-tamil truncate">
-                மாயகிருஷ்ணன் Admin
+              <span className="font-extrabold text-cream-100 text-xs sm:text-sm font-tamil min-w-0 [overflow-wrap:anywhere]">
+                {shopInfo.nameTamil} Admin
               </span>
             </div>
           </div>
 
+          {/* Right Area: Admin User Chip, Logout */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <button className="relative p-2 min-h-[44px] min-w-[44px] flex items-center justify-center text-cream-300 hover:text-gold transition-colors">
-              <Bell size={18} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-gold rounded-full" />
-            </button>
 
-            <div className="hidden sm:flex items-center gap-2 bg-forest-600 px-3 py-1.5 rounded-none border border-gold/30">
-              <div className="w-6 h-6 rounded-full bg-gold text-bark-900 flex items-center justify-center text-xs font-extrabold">
-                A
+            {/* Admin user chip: avatar + name (desktop max-width 200px with title tooltip & ellipsis, mobile avatar only) */}
+            <div
+              title={currentUser.name}
+              className="flex items-center gap-2 bg-forest-600 px-2 sm:px-3 py-1.5 rounded-none border border-gold/30 min-h-[44px]"
+            >
+              <div className="w-6 h-6 rounded-full bg-gold text-bark-900 flex items-center justify-center text-xs font-extrabold shrink-0">
+                {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : "A"}
               </div>
-              <span className="text-xs font-bold text-cream-100 truncate max-w-[100px]">
+              <span className="hidden sm:inline-block text-xs font-bold text-cream-100 truncate max-w-[200px]">
                 {currentUser.name}
               </span>
             </div>
 
+            {/* Logout button: desktop text + icon, mobile 44x44 icon-only */}
             <button
               onClick={handleLogout}
+              aria-label="Logout"
               title="Logout"
-              className="px-2.5 sm:px-3 py-2 min-h-[44px] text-red-300 hover:bg-danger/20 rounded-none transition-colors flex items-center gap-1.5 text-xs font-bold border border-red-400/30 cursor-pointer"
+              className="w-[44px] h-[44px] sm:w-auto sm:h-auto px-0 sm:px-3 py-2 text-red-300 hover:bg-danger/20 rounded-none transition-colors flex items-center justify-center gap-1.5 text-xs font-bold border border-red-400/30 cursor-pointer"
             >
-              <LogOut size={15} />
+              <LogOut size={16} />
               <span className="hidden sm:inline">Logout</span>
             </button>
           </div>

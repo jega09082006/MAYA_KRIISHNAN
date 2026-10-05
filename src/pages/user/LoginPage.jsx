@@ -111,7 +111,7 @@ export default function LoginPage() {
               Login & Registration
             </p>
             <p className="text-xs text-bark-500 mt-1 font-lato">
-              MAYA_KRISHNAN (மாயகிருஷ்ணன்) — Quality Grocery & Herbal Store
+              MAYA_KRISHNAN (மாயக்கிருஷ்ணன்) — Quality Grocery & Herbal Store
             </p>
           </div>
 

@@ -22,13 +22,16 @@ export default function AdminOffersPage() {
   return (
     <div className="space-y-6 text-gray-800 font-lato">
       <div className="border-b border-gray-200 pb-4">
-        <div className="flex items-center gap-2">
-          <GoldLotusOrnament size={22} />
+        <div className="flex items-baseline flex-wrap gap-2">
+          <GoldLotusOrnament size={22} className="self-center shrink-0" />
           <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-gray-900">
-            All Offers <span className="font-tamil font-extrabold text-xl text-forest-700 ml-2">(அனைத்து சலுகைகள்)</span>
+            All Offers
           </h1>
+          <span className="font-catamaran font-bold text-lg text-forest-700">
+            (அனைத்து சலுகைகள்)
+          </span>
         </div>
-        <p className="text-gray-500 text-sm font-lato mt-0.5">
+        <p className="text-gray-500 text-sm font-lato mt-1">
           {offers.length} சலுகைகள் · {offers.filter((o) => o.isActive).length} செயலில் உள்ளன
         </p>
       </div>
@@ -65,7 +68,7 @@ export default function AdminOffersPage() {
             <button
               key={t}
               onClick={() => setTypeFilter(t)}
-              className={`px-4 py-2 rounded-none text-xs font-bold capitalize transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-none text-xs font-bold capitalize transition-all cursor-pointer min-h-[44px] ${
                 typeFilter === t
                   ? "bg-forest text-cream-100 shadow-sm"
                   : "border border-gray-200 text-gray-600 hover:border-forest-400 bg-white"
@@ -111,9 +114,9 @@ export default function AdminOffersPage() {
                     <tr key={offer.id} className="even:bg-gray-50 hover:bg-forest-50/50 transition-colors">
                       {/* Offer name + badge */}
                       <td className="px-5 py-3.5">
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-2.5 min-w-0">
                           <OfferBadge offer={offer} />
-                          <span className="font-bold text-gray-900 text-sm font-lato">{offer.name}</span>
+                          <span className="font-bold text-gray-900 text-sm font-lato min-w-0 [overflow-wrap:anywhere]">{offer.name}</span>
                         </div>
                       </td>
 
@@ -122,18 +125,18 @@ export default function AdminOffersPage() {
                         {cust ? (
                           <Link
                             to={`/admin/customers/${cust.id}`}
-                            className="flex items-center gap-2 group"
+                            className="flex items-center gap-2 group min-w-0"
                           >
                             <img
                               src={cust.avatar}
                               alt={cust.name}
-                              className="w-7 h-7 rounded-full bg-gray-100 border border-gray-200"
+                              className="w-7 h-7 rounded-full bg-gray-100 border border-gray-200 shrink-0"
                               onError={(e) => { e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(cust.name)}&background=2d5a3d&color=fff&size=32`; }}
                             />
-                            <span className="text-gray-700 font-bold text-xs group-hover:text-forest-700 transition-colors font-lato">
+                            <span className="text-gray-700 font-bold text-xs group-hover:text-forest-700 transition-colors font-lato min-w-0 [overflow-wrap:anywhere]">
                               {cust.name}
                             </span>
-                            <ChevronRight size={12} className="text-gray-400 group-hover:text-forest-700 transition-colors" />
+                            <ChevronRight size={12} className="text-gray-400 group-hover:text-forest-700 transition-colors shrink-0" />
                           </Link>
                         ) : (
                           <span className="text-gray-400">—</span>
@@ -144,12 +147,12 @@ export default function AdminOffersPage() {
                       <td className="px-5 py-3.5 hidden sm:table-cell">
                         <div className="flex flex-wrap gap-1 max-w-[220px]">
                           {offer.type === "item" && offerItem ? (
-                            <span className="text-xs font-bold text-forest-800 bg-forest-100 px-2.5 py-0.5 rounded-full truncate max-w-full font-tamil">
+                            <span className="text-xs font-bold text-forest-800 bg-forest-100 px-2.5 py-0.5 rounded-full font-catamaran min-w-0 [overflow-wrap:anywhere]">
                               {offerItem.tamilName || offerItem.englishName}
                             </span>
                           ) : (
                             comboItems.slice(0, 2).map((i) => (
-                              <span key={i.id} className="text-xs font-bold text-forest-800 bg-forest-100 px-2 py-0.5 rounded-full font-tamil">
+                              <span key={i.id} className="text-xs font-bold text-forest-800 bg-forest-100 px-2 py-0.5 rounded-full font-catamaran min-w-0 [overflow-wrap:anywhere]">
                                 {i.tamilName || i.englishName}
                               </span>
                             ))
@@ -171,7 +174,7 @@ export default function AdminOffersPage() {
                       <td className="px-5 py-3.5 text-center">
                         <button
                           onClick={() => updateOffer(offer.id, { isActive: !offer.isActive })}
-                          className={`${offer.isActive ? "text-forest-700" : "text-gray-300"} hover:scale-105 transition-transform cursor-pointer`}
+                          className={`${offer.isActive ? "text-forest-700" : "text-gray-300"} hover:scale-105 transition-transform cursor-pointer min-h-[44px] min-w-[44px] inline-flex items-center justify-center`}
                         >
                           {offer.isActive ? <ToggleRight size={24} /> : <ToggleLeft size={24} />}
                         </button>
@@ -181,7 +184,7 @@ export default function AdminOffersPage() {
                       <td className="px-5 py-3.5 text-right">
                         <button
                           onClick={() => deleteOffer(offer.id)}
-                          className="p-1.5 rounded-none text-danger hover:bg-red-50 transition-colors cursor-pointer"
+                          className="p-1.5 rounded-none text-danger hover:bg-red-50 transition-colors cursor-pointer min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
                         >
                           <Trash2 size={15} />
                         </button>

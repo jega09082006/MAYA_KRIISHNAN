@@ -26,13 +26,18 @@ export default function AdminCustomersPage() {
   return (
     <div className="space-y-6 text-gray-800 font-lato">
       <div className="border-b border-gray-200 pb-4">
-        <div className="flex items-center gap-2">
-          <GoldLotusOrnament size={22} />
+        <div className="flex items-baseline flex-wrap gap-2">
+          <GoldLotusOrnament size={22} className="self-center shrink-0" />
           <h1 className="text-2xl sm:text-3xl font-bold font-playfair text-gray-900">
-            Customers <span className="font-tamil font-extrabold text-xl text-forest-700 ml-2">(வாடிக்கையாளர்கள்)</span>
+            Customers
           </h1>
+          <span className="font-catamaran font-bold text-lg text-forest-700">
+            (வாடிக்கையாளர்கள்)
+          </span>
         </div>
-        <p className="text-gray-500 text-sm font-lato mt-0.5">{customers.length} மொத்த வாடிக்கையாளர்கள் ({customers.length} total customers)</p>
+        <p className="text-gray-500 text-sm font-lato mt-1">
+          {customers.length} மொத்த வாடிக்கையாளர்கள் ({customers.length} total customers)
+        </p>
       </div>
 
       {/* Filters */}
@@ -52,7 +57,7 @@ export default function AdminCustomersPage() {
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`px-4 py-2 rounded-none text-xs font-bold capitalize transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-none text-xs font-bold capitalize transition-all cursor-pointer min-h-[44px] ${
                 statusFilter === s
                   ? "bg-forest text-cream-100 shadow-sm"
                   : "border border-gray-200 text-gray-600 hover:border-forest-400 bg-white"
@@ -76,7 +81,7 @@ export default function AdminCustomersPage() {
             <Link
               key={c.id}
               to={`/admin/customers/${c.id}`}
-              className="bg-white border border-gray-200 rounded-none p-5 shadow-green hover:-translate-y-0.5 transition-all duration-200 group"
+              className="bg-white border border-gray-200 rounded-none p-5 shadow-green hover:-translate-y-0.5 transition-all duration-200 group flex flex-col justify-between"
             >
               <div className="flex items-start gap-4">
                 <img
@@ -90,9 +95,15 @@ export default function AdminCustomersPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <p className="font-bold text-gray-900 truncate font-lato">{c.name}</p>
-                      <p className="text-xs text-gray-400 truncate font-lato">{c.email}</p>
-                      <p className="text-[11px] text-forest-700 font-bold truncate mt-0.5 font-lato">{c.address.split(",")[1]?.trim() || "Tamil Nadu"}</p>
+                      <p className="font-bold text-gray-900 font-lato min-w-0 [overflow-wrap:anywhere] leading-snug">
+                        {c.name}
+                      </p>
+                      <p className="text-xs text-gray-400 font-lato truncate" title={c.email}>
+                        {c.email}
+                      </p>
+                      <p className="text-[11px] text-forest-700 font-bold mt-0.5 font-lato min-w-0 [overflow-wrap:anywhere]">
+                        {c.address.split(",")[1]?.trim() || "Tamil Nadu"}
+                      </p>
                     </div>
                     <span
                       className={`flex-shrink-0 text-xs font-bold px-2 py-0.5 rounded-full ${
@@ -110,17 +121,17 @@ export default function AdminCustomersPage() {
               <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                 {[
                   { label: "Orders", value: c.totalOrders },
-                  { label: "Spent", value: `₹${(c.totalSpent / 1000).toFixed(1)}K` },
+                  { label: "Spent", value: `₹${c.totalSpent.toLocaleString("en-IN")}` },
                   { label: "Offers", value: customerOfferCount(c.id) },
                 ].map((stat) => (
-                  <div key={stat.label} className="bg-gray-50 border border-gray-100 rounded-none py-2">
-                    <p className="font-extrabold text-gray-900 text-sm font-catamaran">{stat.value}</p>
-                    <p className="text-xs text-gray-400 font-lato">{stat.label}</p>
+                  <div key={stat.label} className="bg-gray-50 border border-gray-100 rounded-none py-2 px-1">
+                    <p className="font-extrabold text-gray-900 text-xs sm:text-sm font-catamaran min-w-0 [overflow-wrap:anywhere]">{stat.value}</p>
+                    <p className="text-[11px] text-gray-400 font-lato">{stat.label}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-3 flex items-center justify-between text-xs text-gray-400 font-lato">
+              <div className="mt-3 flex items-center justify-between text-xs text-gray-400 font-lato pt-2 border-t border-gray-100">
                 <span>Joined {new Date(c.joinedAt).toLocaleDateString("en-IN", { year: "numeric", month: "short" })}</span>
                 <ChevronRight size={14} className="group-hover:text-forest-700 transition-colors" />
               </div>
