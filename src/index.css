@@ -127,3 +127,40 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #1d3d29;
 }
+
+/* WhatsApp Floating Button Wave & Pulse Animations */
+@keyframes wa-wave {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes wa-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+
+.wa-wave-ring {
+  animation: wa-wave 2.4s ease-out infinite;
+}
+
+.wa-pulse-btn {
+  animation: wa-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-wave-ring,
+  .wa-pulse-btn {
+    animation: none !important;
+  }
+}
+

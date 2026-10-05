@@ -12,8 +12,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import { useStore } from "../../context/StoreContext";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import PageTransition from "../../components/PageTransition";
 
 export default function LoginPage() {
@@ -94,8 +92,7 @@ export default function LoginPage() {
   }
 
   return (
-    <PageTransition className="min-h-screen flex flex-col bg-storefront text-bark-900">
-      <Navbar />
+    <PageTransition className="flex flex-col bg-storefront text-bark-900">
 
       <div className="flex-1 flex items-center justify-center p-4 py-10 sm:py-16">
         <div className="w-full max-w-md">
@@ -426,8 +423,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </PageTransition>
   );
 }

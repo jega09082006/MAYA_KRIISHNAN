@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Phone, MapPin, ShoppingBag } from "lucide-react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import PageTransition from "../../components/PageTransition";
 import Logo from "../../components/Logo";
 import { GoldLotusOrnament } from "../../components/GoldLotusOrnament";
@@ -18,8 +16,7 @@ export default function AboutPage() {
   );
 
   return (
-    <PageTransition className="min-h-screen flex flex-col bg-storefront text-bark-900">
-      <Navbar />
+    <PageTransition className="flex flex-col bg-storefront text-bark-900">
 
       <main className="flex-1 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8 w-full">
         {/* Signboard Header Card */}
@@ -154,8 +151,6 @@ export default function AboutPage() {
           </div>
         </div>
       </main>
-
-      <Footer />
     </PageTransition>
   );
 }

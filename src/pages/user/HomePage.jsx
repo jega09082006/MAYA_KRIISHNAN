@@ -12,12 +12,9 @@ import {
   ChefHat,
   Wheat,
 } from "lucide-react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import ItemCard from "../../components/ItemCard";
 import PageTransition from "../../components/PageTransition";
 import Logo from "../../components/Logo";
-import FloatingCallButton from "../../components/FloatingCallButton";
 import { GoldLotusOrnament } from "../../components/GoldLotusOrnament";
 import { useStore } from "../../context/StoreContext";
 import { shopInfo } from "../../data/shopInfo";
@@ -51,8 +48,7 @@ export default function HomePage() {
   );
 
   return (
-    <PageTransition className="min-h-screen flex flex-col bg-storefront text-bark-900 pb-12 sm:pb-0">
-      <Navbar />
+    <PageTransition className="flex flex-col bg-storefront text-bark-900">
 
       {/* 2. HERO (mobile optimized: stacked & centered, fits within ~1 screen height) */}
       <section className="bg-hero-mandala py-6 sm:py-12 text-cream-100 border-b border-gold/30">
@@ -295,11 +291,6 @@ export default function HomePage() {
         )}
 
       </div>
-
-      <Footer />
-
-      {/* Floating Call Button on Mobile */}
-      <FloatingCallButton />
     </PageTransition>
   );
 }

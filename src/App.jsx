@@ -2,7 +2,8 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { StoreProvider } from "./context/StoreContext";
 
-// User pages
+// User layout & pages
+import UserLayout from "./components/UserLayout";
 import HomePage from "./pages/user/HomePage";
 import ItemListPage from "./pages/user/ItemListPage";
 import ItemDetailPage from "./pages/user/ItemDetailPage";
@@ -29,14 +30,17 @@ export default function App() {
     <StoreProvider>
       <BrowserRouter>
         <Routes>
-          {/* User routes */}
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ItemListPage />} />
-          <Route path="/item/:id" element={<ItemDetailPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/contact" element={<ContactPage />} />
+          {/* User routes wrapped in UserLayout (includes FloatingWhatsAppButton) */}
+          <Route element={<UserLayout />}>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/shop" element={<ItemListPage />} />
+            <Route path="/item/:id" element={<ItemDetailPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
 
           {/* Admin routes (protected) */}
           <Route
@@ -58,8 +62,6 @@ export default function App() {
             <Route path="customers/:id" element={<AdminCustomerDetailPage />} />
             <Route path="offers" element={<AdminOffersPage />} />
           </Route>
-
-          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </StoreProvider>

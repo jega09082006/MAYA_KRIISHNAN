@@ -1,11 +1,8 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { SlidersHorizontal, X, Search, ChevronDown, Check, ArrowUpDown } from "lucide-react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import ItemCard from "../../components/ItemCard";
 import CategoryChip from "../../components/CategoryChip";
 import PageTransition from "../../components/PageTransition";
-import FloatingCallButton from "../../components/FloatingCallButton";
 import { GoldLotusOrnament } from "../../components/GoldLotusOrnament";
 import { useStore } from "../../context/StoreContext";
 import { getItemImage, getCategoryImage, EG_ICON } from "../../utils/images";
@@ -199,8 +196,7 @@ export default function ItemListPage() {
   );
 
   return (
-    <PageTransition className="min-h-screen flex flex-col bg-storefront text-bark-900 pb-12 sm:pb-0">
-      <Navbar />
+    <PageTransition className="flex flex-col bg-storefront text-bark-900">
 
       {/* Mobile Sticky Control Bar (Under Navbar) */}
       <div className="lg:hidden sticky top-[56px] z-30 bg-[#12281b] border-b border-gold/30 p-2.5 space-y-2">
@@ -575,11 +571,6 @@ export default function ItemListPage() {
           </div>
         </div>
       )}
-
-      <Footer />
-
-      {/* Floating Call Button on Mobile */}
-      <FloatingCallButton />
     </PageTransition>
   );
 }

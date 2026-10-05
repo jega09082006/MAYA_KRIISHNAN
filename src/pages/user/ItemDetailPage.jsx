@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   ShoppingCart,
@@ -7,15 +7,13 @@ import {
   CheckCircle,
   Package,
 } from "lucide-react";
-import Navbar from "../../components/Navbar";
-import Footer from "../../components/Footer";
 import OfferBadge from "../../components/OfferBadge";
 import ItemCard from "../../components/ItemCard";
 import PageTransition from "../../components/PageTransition";
-import FloatingCallButton from "../../components/FloatingCallButton";
 import { GoldLotusOrnament } from "../../components/GoldLotusOrnament";
 import { useStore } from "../../context/StoreContext";
 import { getItemImage, EG_ICON } from "../../utils/images";
+import { getWhatsAppLink } from "../../data/shopInfo";
 
 export default function ItemDetailPage() {
   const { id } = useParams();
@@ -24,179 +22,151 @@ export default function ItemDetailPage() {
     items,
     addToCart,
     getItemPrice,
-    getItemOffer,
-    publicCategories,
-    getGroupsOfItem,
+    getOriginalPrice,
+    getOfferPercentage,
   } = useStore();
 
-  const item = items.find((i) => i.id === id);
-  const [added, setAdded] = useState(false);
   const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty("--bottom-bar-height", "72px");
+    return () => {
+      document.documentElement.style.setProperty("--bottom-bar-height", "0px");
+    };
+  }, []);
+
+  const item = items.find((i) => i.id === id);
 
   if (!item) {
     return (
-      <div className="min-h-screen flex flex-col bg-storefront text-bark-900 font-lato">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center p-4">
-          <div className="text-center p-8 bg-[#faf6ee] border border-bark-200 shadow-green rounded-none max-w-sm w-full">
-            <img
-              src={EG_ICON}
-              alt="Default Icon"
-              className="w-16 h-16 mx-auto mb-4 object-contain"
-            />
-            <h2 className="text-xl font-bold font-tamil text-bark-900 mb-4">
-              பொருள் கிடைக்கவில்லை (Item not found)
-            </h2>
-            <button onClick={() => navigate("/shop")} className="btn-primary rounded-none cursor-pointer w-full min-h-[44px]">
-              Back to Catalogue
-            </button>
-          </div>
+      <PageTransition className="flex flex-col bg-storefront text-bark-900 font-lato">
+        <div className="flex-1 flex flex-col items-center justify-center gap-4 py-16 px-4">
+          <img src={EG_ICON} alt="Not Found" className="w-24 h-24 opacity-60" />
+          <h2 className="text-xl sm:text-2xl font-bold font-tamil text-bark-800 text-center">
+            பொருள் கிடைக்கவில்லை! (Product Not Found)
+          </h2>
+          <button
+            type="button"
+            onClick={() => navigate("/shop")}
+            className="bg-gold text-bark-900 font-bold px-6 py-2.5 rounded-none hover:bg-gold-600 transition-all cursor-pointer min-h-[44px]"
+          >
+            பொருட்கள் பக்கத்திற்குச் செல் (Back to Shop)
+          </button>
         </div>
-        <Footer />
-      </div>
+      </PageTransition>
     );
   }
 
   const discountedPrice = getItemPrice(item);
-  const offer = getItemOffer(item);
-  const hasOffer = offer && discountedPrice < item.price;
-  const itemCats = item.categoryIds || item.publicCategories || [];
-  const cats = publicCategories.filter((c) => itemCats.includes(c.id));
-  const memberGroups = getGroupsOfItem(item.id);
+  const originalPrice = getOriginalPrice(item);
+  const offerPct = getOfferPercentage(item);
 
   const related = items
-    .filter(
-      (i) =>
-        i.id !== item.id &&
-        (i.categoryIds || i.publicCategories || []).some((c) => itemCats.includes(c))
-    )
-    .slice(0, 6);
+    .filter((i) => i.category === item.category && i.id !== item.id)
+    .slice(0, 4);
 
   function handleAdd() {
-    for (let i = 0; i < qty; i++) addToCart(item);
+    addToCart(item, qty);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   }
 
-  const savings = hasOffer ? item.price - discountedPrice : 0;
-  const hasCustomImage = Boolean(item.image || item.imageUrl);
-  const imgSrc = getItemImage(item);
+  const waInquiryMsg = `வணக்கம், இந்த பொருளைப் பற்றி தெரிந்து கொள்ள வேண்டும்: ${item.nameTamil} (${item.nameEnglish}), ${discountedPrice} ₹ / ${item.unit}`;
 
   return (
-    <PageTransition className="min-h-screen flex flex-col bg-storefront text-bark-900 pb-20 sm:pb-0">
-      <Navbar />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1 w-full box-border">
-        {/* Breadcrumb */}
+    <PageTransition className="flex flex-col bg-storefront text-bark-900 font-lato">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 space-y-8 flex-1 w-full">
+        {/* Back Button */}
         <button
+          type="button"
           onClick={() => navigate(-1)}
-          className="flex items-center gap-2 text-sm text-bark-500 hover:text-forest-700 transition-colors mb-4 sm:mb-6 cursor-pointer font-bold font-lato min-h-[44px]"
+          className="inline-flex items-center gap-2 text-forest-700 hover:text-bark-900 font-bold text-sm font-lato cursor-pointer min-h-[44px]"
         >
-          <ArrowLeft size={18} /> பின்செல்ல (Back)
+          <ArrowLeft size={16} />
+          <span>பின்செல்ல (Back to previous page)</span>
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
-          {/* Product Image Square Display */}
-          <div className="bg-[#faf6ee] border border-bark-200 rounded-none aspect-square relative group flex items-center justify-center shadow-green overflow-hidden w-full max-w-md mx-auto lg:max-w-none">
+        {/* Main Product Card Grid */}
+        <div className="bg-[#faf6ee] p-4 sm:p-8 border border-gold/30 shadow-green grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-10">
+          {/* Left Column: Product Image */}
+          <div className="relative bg-cream-100 border border-gold/30 p-4 flex items-center justify-center min-h-[260px] sm:min-h-[360px]">
             <img
-              src={imgSrc}
-              alt={item.tamilName || item.englishName}
-              onError={(e) => {
-                e.currentTarget.src = EG_ICON;
-              }}
-              className={`w-full h-full ${
-                hasCustomImage ? "object-cover" : "object-contain p-6"
-              } transition-transform duration-300`}
+              src={getItemImage(item)}
+              alt={item.nameTamil}
+              className="max-h-72 sm:max-h-96 object-contain w-full"
             />
-
-            {hasOffer && (
-              <div className="absolute top-3 left-3 z-10">
-                <OfferBadge offer={offer} originalPrice={item.price} />
-              </div>
-            )}
-
-            {item.unit && (
-              <div className="absolute bottom-3 right-3 bg-forest-700/90 text-cream-100 text-xs font-bold px-3 py-1 rounded-full font-lato">
-                அளவு: {item.unit}
+            {offerPct > 0 && (
+              <div className="absolute top-3 right-3">
+                <OfferBadge percentage={offerPct} />
               </div>
             )}
           </div>
 
-          {/* Details */}
-          <div className="flex flex-col gap-4 font-lato">
-            {/* Categories & Suggestion Badges */}
-            <div className="flex flex-wrap gap-1.5 items-center">
-              {cats.map((c) => (
-                <span
-                  key={c.id}
-                  className="text-xs font-bold px-3 py-1 rounded-full bg-forest-100 text-forest-800"
-                >
-                  {c.label}
-                </span>
-              ))}
-              {memberGroups.map((g) => (
-                <span
-                  key={g.id}
-                  className="text-xs font-bold px-3 py-1 rounded-full bg-gold-100 text-bark-900 border border-gold"
-                >
-                  ★ {g.tamilName}
-                </span>
-              ))}
-            </div>
+          {/* Right Column: Product Details */}
+          <div className="space-y-4 flex flex-col justify-center">
+            {/* Category tag */}
+            <span className="inline-block bg-forest-100 text-forest-800 text-xs font-bold px-3 py-1 rounded-full font-lato self-start">
+              {item.category}
+            </span>
 
-            {/* Tamil Name (Primary ~24px) & English Name (Secondary) */}
+            {/* Tamil & English Titles */}
             <div>
-              <h1 className="text-2xl sm:text-4xl font-extrabold font-tamil text-bark-900 leading-snug">
-                {item.tamilName}
+              <h1 className="text-2xl sm:text-4xl font-extrabold font-tamil text-bark-900 leading-tight">
+                {item.nameTamil}
               </h1>
-              <p className="text-sm sm:text-lg text-bark-500 font-lato font-normal mt-1">
-                {item.englishName}
+              <p className="text-sm sm:text-base font-bold text-bark-600 font-lato mt-0.5">
+                {item.nameEnglish} ({item.unit})
               </p>
             </div>
 
-            {/* Price Box */}
-            <div className="bg-[#faf6ee] border border-bark-200 p-4 sm:p-5 rounded-none shadow-green">
-              <div className="flex items-baseline gap-3 flex-wrap">
-                <span className="text-2xl sm:text-4xl font-extrabold text-forest-700 font-catamaran">
-                  ₹{discountedPrice.toLocaleString()}
+            {/* Price section */}
+            <div className="flex items-baseline gap-3 pt-1 border-t border-gold/20">
+              <span className="text-2xl sm:text-4xl font-extrabold text-forest-700 font-catamaran">
+                ₹{discountedPrice}
+              </span>
+              {originalPrice > discountedPrice && (
+                <span className="text-base sm:text-lg text-bark-400 line-through font-catamaran font-semibold">
+                  ₹{originalPrice}
                 </span>
-                {hasOffer && (
-                  <>
-                    <span className="text-lg text-bark-400 line-through font-lato">
-                      ₹{item.price.toLocaleString()}
-                    </span>
-                    <span className="bg-gold text-bark-900 text-xs font-extrabold px-2.5 py-1 rounded-full font-lato">
-                      தள்ளுபடி ₹{savings.toLocaleString()}!
-                    </span>
-                  </>
-                )}
-                {item.unit && (
-                  <span className="text-xs sm:text-sm font-semibold text-bark-500 font-lato">
-                    / {item.unit}
-                  </span>
-                )}
-              </div>
-              {hasOffer && (
-                <div className="mt-2.5 flex items-center gap-2">
-                  <OfferBadge offer={offer} originalPrice={item.price} />
-                  <span className="text-xs sm:text-sm text-bark-700 font-bold font-lato">{offer.name}</span>
-                </div>
               )}
+              <span className="text-xs font-bold text-bark-500 font-lato">
+                / {item.unit}
+              </span>
             </div>
 
             {/* Description */}
-            <div className="bg-[#faf6ee] p-4 rounded-none border border-bark-200 space-y-1">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-bark-400 font-lato">
-                பொருள் விளக்கம் (Product Description)
+            <div className="space-y-1.5 pt-2">
+              <h3 className="font-bold text-xs text-bark-400 uppercase tracking-wider">
+                பொருள் விவரம் (Description)
               </h3>
-              <p className="text-bark-800 leading-relaxed text-sm font-lato">
-                {item.description}
+              <p className="text-sm sm:text-base text-bark-800 font-tamil leading-relaxed">
+                {item.descriptionTamil || "சிறந்த தரமான பொருள்."}
               </p>
+              {item.descriptionEnglish && (
+                <p className="text-xs sm:text-sm text-bark-600 font-lato">
+                  {item.descriptionEnglish}
+                </p>
+              )}
             </div>
 
-            {/* Tags */}
-            {item.tags?.length > 0 && (
-              <div className="flex flex-wrap gap-1.5">
+            {/* Product Uses / Benefits */}
+            {item.usesTamil && item.usesTamil.length > 0 && (
+              <div className="space-y-1.5 pt-2">
+                <h3 className="font-bold text-xs text-bark-400 uppercase tracking-wider">
+                  பயன்கள் (Uses & Benefits)
+                </h3>
+                <ul className="list-disc list-inside text-xs sm:text-sm text-bark-800 font-tamil space-y-1">
+                  {item.usesTamil.map((use, idx) => (
+                    <li key={idx}>{use}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Product Tags */}
+            {item.tags && item.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 pt-2">
                 {item.tags.map((tag) => (
                   <span key={tag} className="flex items-center gap-1 bg-forest-100 text-forest-800 text-xs font-bold px-2.5 py-1 rounded-full">
                     <Tag size={10} /> {tag}
@@ -206,7 +176,7 @@ export default function ItemDetailPage() {
             )}
 
             {/* Stock */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 pt-1">
               <Package size={16} className={item.stock > 10 ? "text-forest-700" : "text-danger"} />
               <span
                 className={`text-xs sm:text-sm font-bold ${
@@ -261,10 +231,33 @@ export default function ItemDetailPage() {
                 )}
               </button>
             </div>
+
+            {/* Ask about this item on WhatsApp link */}
+            <div className="pt-3">
+              <a
+                href={getWhatsAppLink(waInquiryMsg)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 border border-[#25D366] text-[#1d3d29] hover:bg-[#25D366]/10 px-4 py-2.5 rounded-none font-bold text-xs sm:text-sm transition-colors cursor-pointer min-h-[44px] w-full sm:w-auto justify-center"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="text-[#25D366] shrink-0"
+                >
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.105 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l.999 1.591-1.048 3.834 3.792-1.026.999.598zm11.383-7.51c-.287-.144-1.701-.84-1.963-.935-.262-.096-.453-.144-.645.144-.192.288-.744.935-.912 1.127-.168.192-.336.216-.623.072-.287-.144-1.215-.448-2.315-1.428-.857-.764-1.435-1.707-1.603-1.995-.168-.288-.018-.444.126-.587.13-.129.288-.336.432-.504.144-.168.192-.288.288-.48.096-.192.048-.36-.024-.504-.072-.144-.645-1.585-.883-2.16-.232-.559-.467-.483-.645-.492-.168-.008-.36-.01-.552-.01-.192 0-.504.072-.768.36-.264.288-1.008.985-1.008 2.401 0 1.417 1.032 2.784 1.176 2.977.144.192 2.033 3.103 4.925 4.35.688.297 1.225.475 1.644.609.691.22 1.32.189 1.817.115.555-.083 1.701-.696 1.94-1.368.24-.672.24-1.248.168-1.368-.072-.12-.264-.192-.552-.336z" />
+                </svg>
+                <span>இந்த பொருளைப் பற்றி WhatsApp-ல் கேளுங்கள் / Ask about this item on WhatsApp</span>
+              </a>
+            </div>
+
           </div>
         </div>
 
-        {/* Related Items (Horizontal Swipe Row on mobile) */}
+        {/* Related Items */}
         {related.length > 0 && (
           <section className="mt-12 pt-6 border-t border-gold/30 space-y-4">
             <div className="flex items-center gap-2.5">
@@ -274,8 +267,7 @@ export default function ItemDetailPage() {
               </h2>
             </div>
 
-            {/* Mobile horizontal snap row */}
-            <div className="flex sm:grid sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 overflow-x-auto snap-x snap-mandatory no-scrollbar pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0">
+            <div className="flex sm:grid sm:grid-cols-4 gap-3 sm:gap-4 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 sm:mx-0 sm:px-0 snap-x">
               {related.map((r) => (
                 <div key={r.id} className="snap-start w-[155px] sm:w-auto shrink-0">
                   <ItemCard item={r} showCategories={true} />
@@ -315,11 +307,6 @@ export default function ItemDetailPage() {
           )}
         </button>
       </div>
-
-      <Footer />
-
-      {/* Floating Call Button moved above sticky bottom bar on mobile */}
-      <FloatingCallButton hasStickyBottomBar={true} />
     </PageTransition>
   );
 }
