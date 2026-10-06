@@ -37,7 +37,6 @@
   html.lang-ta h1, html.lang-ta h2, html.lang-ta h3, html.lang-ta h4, html.lang-ta h5, html.lang-ta h6 {
     font-family: var(--font-catamaran);
     line-height: 1.4;
-    color: var(--bark-900);
     overflow-wrap: anywhere;
     word-break: break-word;
   }
@@ -49,7 +48,6 @@
 
   html.lang-en h1, html.lang-en h2, html.lang-en h3, html.lang-en h4, html.lang-en h5, html.lang-en h6 {
     font-family: var(--font-playfair);
-    color: var(--bark-900);
     overflow-wrap: anywhere;
     word-break: break-word;
   }

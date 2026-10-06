@@ -74,9 +74,9 @@ export default function HomePage() {
               ) : null}
 
               <h1
-                className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-catamaran text-gold-400 tracking-tight leading-tight"
+                className="text-3xl sm:text-5xl lg:text-6xl font-extrabold font-catamaran text-gold-300 tracking-tight leading-tight"
                 style={{
-                  textShadow: "0 0 6px rgba(29,61,41,0.9), 2px 2px 0px #0a170f",
+                  textShadow: "0 2px 6px rgba(0,0,0,0.35)",
                 }}
               >
                 {shopName}
