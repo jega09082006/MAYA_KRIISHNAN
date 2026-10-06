@@ -11,12 +11,15 @@ import {
   X,
 } from "lucide-react";
 import { useStore } from "../context/StoreContext";
+import { useLang } from "../context/LanguageContext";
 import { shopInfo } from "../data/shopInfo";
 import Logo from "./Logo";
 import ShopInfoBar from "./ShopInfoBar";
+import LanguageSwitch from "./LanguageSwitch";
 
 export default function Navbar() {
   const { cartCount, currentUser, logout, setSearchQuery, searchQuery } = useStore();
+  const { lang, t } = useLang();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,10 +65,10 @@ export default function Navbar() {
   }
 
   const navLinks = [
-    { to: "/", tamil: "முகப்பு", english: "Home" },
-    { to: "/shop", tamil: "பொருட்கள்", english: "Shop" },
-    { to: "/about", tamil: "எங்களை பற்றி", english: "About" },
-    { to: "/contact", tamil: "தொடர்பு", english: "Contact" },
+    { to: "/", key: "navHome" },
+    { to: "/shop", key: "navShop" },
+    { to: "/about", key: "navAbout" },
+    { to: "/contact", key: "navContact" },
   ];
 
   return (
@@ -74,24 +77,24 @@ export default function Navbar() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-[56px] lg:h-16">
             
-            {/* Left: Round Logo 36px on mobile + Shop Name */}
+            {/* Left: Round Logo 36px on mobile + Shop Name (Single language) */}
             <Link to="/" className="flex items-center gap-2.5 group shrink-0">
               <Logo className="w-9 h-9 sm:w-10 sm:h-10 group-hover:scale-105 transition-transform duration-200" />
               <div className="flex flex-col min-w-0">
-                <span className="font-extrabold text-base sm:text-xl tracking-tight text-cream-100 font-tamil leading-none truncate max-w-[170px] sm:max-w-none">
-                  {shopInfo.nameTamil}
+                <span className="font-extrabold text-base sm:text-xl tracking-tight text-cream-100 font-catamaran leading-none truncate max-w-[170px] sm:max-w-none">
+                  {lang === "ta" ? shopInfo.nameTamil : shopInfo.nameEnglish}
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-bold text-gold-300 font-lato leading-tight mt-0.5 tracking-wider truncate max-w-[170px] sm:max-w-none">
-                  {shopInfo.nameEnglish}
+                <span className="text-[10px] sm:text-[11px] font-bold text-gold-300 font-catamaran leading-tight mt-0.5 tracking-wider truncate max-w-[170px] sm:max-w-none">
+                  {lang === "ta" ? shopInfo.businessTamil : shopInfo.businessEnglish}
                 </span>
               </div>
             </Link>
 
             {/* Laptop Navigation Links (1024px+) */}
-            <div className="hidden lg:flex items-center gap-6 text-sm font-bold font-lato text-cream-100">
+            <div className="hidden lg:flex items-center gap-6 text-sm font-bold font-catamaran text-cream-100">
               {navLinks.map((link) => (
                 <Link key={link.to} to={link.to} className="hover:text-gold transition-colors">
-                  {link.tamil} ({link.english})
+                  {t(link.key)}
                 </Link>
               ))}
             </div>
@@ -108,7 +111,7 @@ export default function Navbar() {
                 />
                 <input
                   type="text"
-                  placeholder="தேடுக... Search herbs, spices..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-9 pr-4 py-1.5 rounded-none border border-gold/30 text-sm focus:outline-none focus:ring-2 focus:ring-gold bg-[#faf6ee] text-bark-900 placeholder:text-bark-400 font-medium"
@@ -119,6 +122,9 @@ export default function Navbar() {
             {/* Right side icons (Mobile & Desktop) */}
             <div className="flex items-center gap-1.5 sm:gap-3">
               
+              {/* Language Switch Button */}
+              <LanguageSwitch />
+
               {/* Mobile Search Toggle Icon */}
               <button
                 type="button"
@@ -136,7 +142,7 @@ export default function Navbar() {
                   className="hidden sm:flex items-center gap-1.5 text-xs font-bold text-gold border border-gold hover:bg-gold hover:text-bark-900 px-3 py-1.5 rounded-none transition-colors min-h-[44px]"
                 >
                   <LayoutDashboard size={15} />
-                  Admin Panel
+                  {t("navAdmin")}
                 </Link>
               )}
 
@@ -144,7 +150,7 @@ export default function Navbar() {
               <Link
                 to="/cart"
                 className="relative p-2 text-cream-100 hover:text-gold transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center cursor-pointer"
-                title="Shopping Cart"
+                title={t("navCart")}
               >
                 <ShoppingCart size={22} />
                 {cartCount > 0 && (
@@ -173,7 +179,7 @@ export default function Navbar() {
                     className="flex items-center gap-1.5 bg-gold text-bark-900 hover:bg-gold-600 px-4 py-1.5 rounded-none text-sm font-extrabold shadow-sm transition-all min-h-[44px]"
                   >
                     <User size={16} />
-                    Login
+                    {t("navLogin")}
                   </Link>
                 )}
 
@@ -191,7 +197,7 @@ export default function Navbar() {
                         onClick={() => setUserDropdown(false)}
                         className="flex items-center gap-2 px-4 py-2.5 text-sm text-forest-700 hover:bg-forest-100 transition-colors font-bold"
                       >
-                        <LayoutDashboard size={15} /> Admin Dashboard
+                        <LayoutDashboard size={15} /> {t("adminDashboard")}
                       </Link>
                     )}
                     <button
@@ -202,7 +208,7 @@ export default function Navbar() {
                       }}
                       className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-danger hover:bg-red-50 transition-colors font-bold cursor-pointer"
                     >
-                      <LogOut size={15} /> Logout
+                      <LogOut size={15} /> {t("navLogout")}
                     </button>
                   </div>
                 )}
@@ -231,7 +237,7 @@ export default function Navbar() {
                 <input
                   type="text"
                   autoFocus
-                  placeholder="மஞ்சள், Turmeric, லேகியம்..."
+                  placeholder={t("searchPlaceholder")}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-10 py-2.5 rounded-none border border-gold/40 text-base bg-[#faf6ee] text-bark-900 placeholder:text-bark-400 font-medium"
@@ -261,13 +267,13 @@ export default function Navbar() {
           />
 
           {/* Drawer Content */}
-          <div className="relative w-[290px] sm:w-[320px] max-w-full h-full bg-[#faf6ee] text-bark-900 shadow-2xl flex flex-col z-10 font-lato">
+          <div className="relative w-[290px] sm:w-[320px] max-w-full h-full bg-[#faf6ee] text-bark-900 shadow-2xl flex flex-col z-10">
             {/* Header */}
             <div className="bg-[#1d3d29] text-cream-100 p-4 flex items-center justify-between border-b border-gold/30">
               <div className="flex items-center gap-2">
                 <Logo className="w-8 h-8" />
-                <span className="font-extrabold font-tamil text-lg text-gold">
-                  {shopInfo.nameTamil}
+                <span className="font-extrabold font-catamaran text-lg text-gold">
+                  {lang === "ta" ? shopInfo.nameTamil : shopInfo.nameEnglish}
                 </span>
               </div>
               <button
@@ -279,7 +285,15 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Links List (Each 52px high row) */}
+            {/* Language Switch in Drawer */}
+            <div className="p-3 bg-[#142e1f] border-b border-gold/20 flex items-center justify-between">
+              <span className="text-xs font-bold text-gold-300">
+                {lang === "ta" ? "மொழி மாற்றுக" : "Language"}
+              </span>
+              <LanguageSwitch />
+            </div>
+
+            {/* Links List */}
             <div className="flex-1 overflow-y-auto divide-y divide-bark-200/60">
               {navLinks.map((link) => (
                 <Link
@@ -288,11 +302,8 @@ export default function Navbar() {
                   onClick={() => setDrawerOpen(false)}
                   className="flex items-center justify-between px-5 h-[52px] hover:bg-forest-100/60 transition-colors"
                 >
-                  <span className="font-extrabold font-tamil text-bark-900 text-lg">
-                    {link.tamil}
-                  </span>
-                  <span className="text-xs font-bold font-lato text-bark-500 uppercase tracking-wider">
-                    {link.english}
+                  <span className="font-extrabold font-catamaran text-bark-900 text-lg">
+                    {t(link.key)}
                   </span>
                 </Link>
               ))}
@@ -301,12 +312,11 @@ export default function Navbar() {
                 <Link
                   to="/admin/dashboard"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-between px-5 h-[52px] bg-gold-100/60 hover:bg-gold-200/60 transition-colors"
+                  className="flex items-center justify-between px-5 h-[52px] bg-gold-100/60 hover:bg-gold-200/60 transition-colors font-extrabold"
                 >
-                  <span className="font-extrabold font-tamil text-bark-900 text-base">
-                    கட்டுப்பாட்டு அறை
+                  <span className="font-catamaran text-bark-900 text-base">
+                    {t("navAdmin")}
                   </span>
-                  <span className="text-xs font-bold text-forest-700">Admin Panel</span>
                 </Link>
               )}
 
@@ -317,27 +327,25 @@ export default function Navbar() {
                     setDrawerOpen(false);
                     navigate("/login");
                   }}
-                  className="w-full flex items-center justify-between px-5 h-[52px] text-danger hover:bg-red-50 transition-colors cursor-pointer text-left"
+                  className="w-full flex items-center justify-between px-5 h-[52px] text-danger hover:bg-red-50 transition-colors cursor-pointer text-left font-extrabold"
                 >
-                  <span className="font-extrabold font-tamil text-base">வெளியேறு</span>
-                  <span className="text-xs font-bold">Logout ({currentUser.name.split(" ")[0]})</span>
+                  <span>{t("navLogout")} ({currentUser.name.split(" ")[0]})</span>
                 </button>
               ) : (
                 <Link
                   to="/login"
                   onClick={() => setDrawerOpen(false)}
-                  className="flex items-center justify-between px-5 h-[52px] bg-gold text-bark-900 font-extrabold"
+                  className="flex items-center justify-between px-5 h-[52px] bg-gold text-bark-900 font-extrabold text-lg"
                 >
-                  <span className="font-tamil text-lg">உள்நுழைவு</span>
-                  <span className="text-xs font-lato uppercase">Login</span>
+                  <span>{t("navLogin")}</span>
                 </Link>
               )}
             </div>
 
             {/* Footer */}
             <div className="p-4 bg-[#142e1f] text-cream-100 border-t border-gold/20 text-center space-y-1">
-              <p className="font-tamil text-xs font-bold text-gold-300">
-                {shopInfo.businessTamil}
+              <p className="font-catamaran text-xs font-bold text-gold-300">
+                {lang === "ta" ? shopInfo.businessTamil : shopInfo.businessEnglish}
               </p>
               <a
                 href={shopInfo.phoneLink}

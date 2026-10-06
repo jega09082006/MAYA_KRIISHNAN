@@ -17,9 +17,31 @@ export function StoreProvider({ children }) {
   const [orders] = useState(MOCK_ORDERS);
   const [publicCategories, setPublicCategories] = useState(PUBLIC_CATEGORIES);
   const [suggestionGroups, setSuggestionGroups] = useState(MOCK_SUGGESTION_GROUPS);
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(() => {
+    // ── Persist cart across page refreshes ─────────────────────────────
+    try {
+      const saved = localStorage.getItem("maya_cart");
+      if (!saved) return [];
+      const parsed = JSON.parse(saved);
+      // Drop any invalid entries (must be {id: string, qty: positive number})
+      return Array.isArray(parsed)
+        ? parsed.filter((e) => e && typeof e.id === "string" && typeof e.qty === "number" && e.qty > 0)
+        : [];
+    } catch (_) {
+      return [];
+    }
+  });
   const [currentUser, setCurrentUser] = useState(null); // null = guest, { role:'admin'|'customer', ...data }
   const [searchQuery, setSearchQuery] = useState("");
+
+  // ── Persist cart to localStorage on every change ──────────────────────
+  React.useEffect(() => {
+    try {
+      localStorage.setItem("maya_cart", JSON.stringify(cart));
+    } catch (_) {
+      // Storage full or blocked — silent fail
+    }
+  }, [cart]);
 
   // ── Derived Active Suggestion Groups with resolved items ──
   const activeSuggestionGroups = useMemo(() => {
@@ -41,19 +63,21 @@ export function StoreProvider({ children }) {
     : [];
 
   function getItemPrice(item) {
-    if (!currentUser || currentUser.role !== "customer") return item.price;
+    if (!item) return 0;
+    if (!currentUser || currentUser.role !== "customer") return item.price ?? 0;
     const offer = activeOffersForUser.find(
       (o) => o.type === "item" && o.itemId === item.id
     );
-    if (!offer) return item.price;
+    if (!offer) return item.price ?? 0;
     if (offer.discountType === "percent")
-      return Math.round(item.price * (1 - offer.discountValue / 100));
+      return Math.round((item.price ?? 0) * (1 - offer.discountValue / 100));
     if (offer.discountType === "flat")
-      return Math.max(0, item.price - offer.discountValue);
-    return item.price;
+      return Math.max(0, (item.price ?? 0) - offer.discountValue);
+    return item.price ?? 0;
   }
 
   function getItemOffer(item) {
+    if (!item) return null;
     if (!currentUser || currentUser.role !== "customer") return null;
     return (
       activeOffersForUser.find(
@@ -63,14 +87,18 @@ export function StoreProvider({ children }) {
   }
 
   // ── Cart ─────────────────────────────────────────────────
-  function addToCart(item) {
+  // Store only { id, qty } — resolve to full item at render time.
+  // qty param lets callers add more than 1 at once (e.g. Buy Now from card).
+  function addToCart(item, qty = 1) {
+    if (!item?.id || qty < 1) return;
+    const safeQty = Math.max(1, Math.round(qty));
     setCart((prev) => {
       const existing = prev.find((c) => c.id === item.id);
       if (existing)
         return prev.map((c) =>
-          c.id === item.id ? { ...c, qty: c.qty + 1 } : c
+          c.id === item.id ? { ...c, qty: c.qty + safeQty } : c
         );
-      return [...prev, { ...item, qty: 1 }];
+      return [...prev, { id: item.id, qty: safeQty }];
     });
   }
 
@@ -89,11 +117,58 @@ export function StoreProvider({ children }) {
     setCart([]);
   }
 
+  /**
+   * mergeCart — called after login/register to combine the guest cart
+   * (already in state) with any persisted customer cart.
+   * Strategy: for each entry in `incomingCart`, if the same itemId already
+   * exists in the current state cart, add the quantities; otherwise append.
+   * This keeps the guest items the user added before logging in.
+   */
+  function mergeCart(incomingCart) {
+    if (!incomingCart || incomingCart.length === 0) return;
+    setCart((prev) => {
+      const merged = [...prev];
+      for (const entry of incomingCart) {
+        if (!entry?.id) continue;
+        const idx = merged.findIndex((c) => c.id === entry.id);
+        if (idx !== -1) {
+          merged[idx] = { ...merged[idx], qty: merged[idx].qty + (entry.qty || 1) };
+        } else {
+          merged.push({ id: entry.id, qty: entry.qty || 1 });
+        }
+      }
+      return merged;
+    });
+  }
+
   const cartCount = cart.reduce((s, c) => s + c.qty, 0);
-  const cartTotal = cart.reduce(
-    (s, c) => s + getItemPrice(c) * c.qty,
-    0
-  );
+
+  // cartTotal is a FUNCTION so consumers can call cartTotal() safely.
+  // getItemPrice guards against missing/undefined items.
+  function cartTotal() {
+    return cart.reduce((s, c) => {
+      const masterItem = items.find((i) => i.id === c.id) || c;
+      return s + getItemPrice(masterItem) * (c.qty || 1);
+    }, 0);
+  }
+
+  // ── Price helpers exposed to ItemDetailPage ───────────────
+  /** Returns the original (undiscounted) price for an item. */
+  function getOriginalPrice(item) {
+    if (!item) return 0;
+    return item.price ?? 0;
+  }
+
+  /** Returns the discount % (0–100) if an active offer applies, else 0. */
+  function getOfferPercentage(item) {
+    if (!item) return 0;
+    const offer = getItemOffer(item);
+    if (!offer) return 0;
+    const discounted = getItemPrice(item);
+    const original   = item.price ?? 0;
+    if (original <= 0) return 0;
+    return Math.round(((original - discounted) / original) * 100);
+  }
 
   // ── Auth ─────────────────────────────────────────────────
   function login(identifier, password) {
@@ -417,6 +492,7 @@ export function StoreProvider({ children }) {
         removeFromCart,
         updateCartQty,
         clearCart,
+        mergeCart,
         // auth
         currentUser,
         login,
@@ -427,6 +503,8 @@ export function StoreProvider({ children }) {
         // pricing
         getItemPrice,
         getItemOffer,
+        getOriginalPrice,
+        getOfferPercentage,
         activeOffersForUser,
         // admin items
         addItem,

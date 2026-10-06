@@ -28,19 +28,49 @@
     font-size: 16px;
   }
 
-  /* Tamil Text rules */
-  .font-tamil, [lang="ta"] {
+  /* Language font rules */
+  html.lang-ta body, html.lang-ta {
+    font-family: var(--font-catamaran);
+    line-height: 1.6;
+  }
+
+  html.lang-ta h1, html.lang-ta h2, html.lang-ta h3, html.lang-ta h4, html.lang-ta h5, html.lang-ta h6 {
+    font-family: var(--font-catamaran);
+    line-height: 1.4;
+    color: var(--bark-900);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  html.lang-en body {
+    font-family: var(--font-lato);
+    line-height: 1.5;
+  }
+
+  html.lang-en h1, html.lang-en h2, html.lang-en h3, html.lang-en h4, html.lang-en h5, html.lang-en h6 {
+    font-family: var(--font-playfair);
+    color: var(--bark-900);
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  /* Tamil Text class backward compatibility */
+  .font-tamil {
     font-family: var(--font-catamaran);
     line-height: 1.6;
     overflow-wrap: anywhere;
     word-break: break-word;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-catamaran);
-    color: var(--bark-900);
-    overflow-wrap: anywhere;
-    word-break: break-word;
+  /* 200ms Language Switch Fade Transition */
+  .lang-transition {
+    transition: opacity 200ms ease-in-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lang-transition {
+      transition: none !important;
+    }
   }
 }
 

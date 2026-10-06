@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { StoreProvider } from "./context/StoreContext";
+import { LanguageProvider } from "./context/LanguageContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // User layout & pages
 import UserLayout from "./components/UserLayout";
@@ -8,6 +10,7 @@ import HomePage from "./pages/user/HomePage";
 import ItemListPage from "./pages/user/ItemListPage";
 import ItemDetailPage from "./pages/user/ItemDetailPage";
 import CartPage from "./pages/user/CartPage";
+import CheckoutPage from "./pages/user/CheckoutPage";
 import LoginPage from "./pages/user/LoginPage";
 import AboutPage from "./pages/user/AboutPage";
 import ContactPage from "./pages/user/ContactPage";
@@ -27,43 +30,60 @@ import AdminOffersPage from "./pages/admin/AdminOffersPage";
 
 export default function App() {
   return (
-    <StoreProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* User routes wrapped in UserLayout (includes FloatingWhatsAppButton) */}
-          <Route element={<UserLayout />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/shop" element={<ItemListPage />} />
-            <Route path="/item/:id" element={<ItemDetailPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
+    <LanguageProvider>
+      <StoreProvider>
+        <BrowserRouter>
+          <ErrorBoundary>
+            <Routes>
+              {/* User routes wrapped in UserLayout */}
+              <Route element={<UserLayout />}>
+                <Route path="/"       element={<ErrorBoundary><HomePage /></ErrorBoundary>} />
+                <Route path="/shop"   element={<ErrorBoundary><ItemListPage /></ErrorBoundary>} />
+                <Route path="/item/:id" element={<ErrorBoundary><ItemDetailPage /></ErrorBoundary>} />
+                <Route path="/cart"   element={<ErrorBoundary><CartPage /></ErrorBoundary>} />
+                <Route path="/login"  element={<ErrorBoundary><LoginPage /></ErrorBoundary>} />
+                <Route path="/about"  element={<ErrorBoundary><AboutPage /></ErrorBoundary>} />
+                <Route path="/contact" element={<ErrorBoundary><ContactPage /></ErrorBoundary>} />
 
-          {/* Admin routes (protected) */}
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute requiredRole="admin">
-                <AdminLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={<AdminDashboard />} />
-            <Route path="items" element={<AdminItemsPage />} />
-            <Route path="items/new" element={<AdminAddItemPage />} />
-            <Route path="items/edit/:id" element={<AdminAddItemPage />} />
-            <Route path="categories" element={<AdminCategoriesPage />} />
-            <Route path="suggestions" element={<AdminSuggestionPage />} />
-            <Route path="customers" element={<AdminCustomersPage />} />
-            <Route path="customers/:id" element={<AdminCustomerDetailPage />} />
-            <Route path="offers" element={<AdminOffersPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </StoreProvider>
+                {/* Checkout: requires any logged-in user */}
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute requiredRole="customer">
+                      <ErrorBoundary><CheckoutPage /></ErrorBoundary>
+                    </ProtectedRoute>
+                  }
+                />
+
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Route>
+
+              {/* Admin routes (protected) */}
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute requiredRole="admin">
+                    <ErrorBoundary>
+                      <AdminLayout />
+                    </ErrorBoundary>
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard"      element={<ErrorBoundary><AdminDashboard /></ErrorBoundary>} />
+                <Route path="items"          element={<ErrorBoundary><AdminItemsPage /></ErrorBoundary>} />
+                <Route path="items/new"      element={<ErrorBoundary><AdminAddItemPage /></ErrorBoundary>} />
+                <Route path="items/edit/:id" element={<ErrorBoundary><AdminAddItemPage /></ErrorBoundary>} />
+                <Route path="categories"     element={<ErrorBoundary><AdminCategoriesPage /></ErrorBoundary>} />
+                <Route path="suggestions"    element={<ErrorBoundary><AdminSuggestionPage /></ErrorBoundary>} />
+                <Route path="customers"      element={<ErrorBoundary><AdminCustomersPage /></ErrorBoundary>} />
+                <Route path="customers/:id"  element={<ErrorBoundary><AdminCustomerDetailPage /></ErrorBoundary>} />
+                <Route path="offers"         element={<ErrorBoundary><AdminOffersPage /></ErrorBoundary>} />
+              </Route>
+            </Routes>
+          </ErrorBoundary>
+        </BrowserRouter>
+      </StoreProvider>
+    </LanguageProvider>
   );
 }
